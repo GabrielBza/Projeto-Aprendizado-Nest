@@ -84,4 +84,30 @@ export class ProdutosService {
 
     return novoProduto;
   }
+
+  atualizar(id: number, dados: AtualizarProdutoDto): Produto {
+    const produto = this.buscarPorId(id);
+
+    if (dados.nome !== undefined) {
+      produto.nome = dados.nome;
+    }
+
+    if (dados.descricao !== undefined) {
+      produto.descricao = dados.descricao;
+    }
+
+    if (dados.preco !== undefined) {
+      produto.preco = dados.preco;
+    }
+
+    if (dados.categoria !== undefined) {
+      produto.categoria = dados.categoria;
+    }
+
+    if (dados.disponivel !== undefined) {
+      produto.disponivel = dados.disponivel;
+    }
+
+    return produto;
+  }
 }
