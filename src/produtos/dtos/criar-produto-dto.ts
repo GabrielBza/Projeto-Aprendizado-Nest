@@ -1,4 +1,10 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 import { CategoriaProduto } from '../interfaces/produto.interface';
 
 export class CriarProdutoDto {
@@ -10,7 +16,7 @@ export class CriarProdutoDto {
   @IsNotEmpty()
   descricao!: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   preco!: number;
 
@@ -18,7 +24,7 @@ export class CriarProdutoDto {
   @IsNotEmpty()
   categoria!: CategoriaProduto;
 
-  @IsString()
+  @IsBoolean()
   @IsNotEmpty()
   disponivel!: boolean;
 }
