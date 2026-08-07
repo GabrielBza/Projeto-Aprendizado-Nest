@@ -110,4 +110,13 @@ export class ProdutosService {
 
     return produto;
   }
+
+  deletar(id: number): { mensagem: string; produto: Produto } {
+    const produto = this.buscarPorId(id);
+    const indiceProduto = this.produtos.indexOf(produto);
+
+    this.produtos.splice(indiceProduto, 1);
+
+    return { mensagem: 'Produto deletado com sucesso!', produto: produto };
+  }
 }
