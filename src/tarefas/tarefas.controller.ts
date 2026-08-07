@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Patch, Delete } from '@nestjs/common';
 import { TarefasService } from './tarefas.service';
 import type { Tarefa } from './interfaces/tarefa.interface';
 import { CriarTarefaDto } from './dtos/criar-tarefa-dto';
@@ -26,5 +26,10 @@ export class TarefasController {
     @Patch(":id")
     atualizar(@Param("id") id:string, @Body() dados:AtualizarTarefaDto): Tarefa{
         return this.tarefasService.atualizar(Number(id), dados);
+    }
+
+    @Delete(":id")
+    deletar(@Param("id") id:string){
+        return this.tarefasService.deletar(Number(id))
     }
 }

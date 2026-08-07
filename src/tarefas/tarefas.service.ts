@@ -70,4 +70,13 @@ export class TarefasService {
 
         return tarefa;
     }
+
+    deletar(id:number): {mensagem:string, tarefa:Tarefa}{
+        const tarefa = this.buscarPorId(id);
+        const indiceTarefa = this.tarefas.indexOf(tarefa);
+
+        this.tarefas.splice(indiceTarefa, 1);
+
+        return {mensagem:"Tarefa deletada com sucesso", tarefa:tarefa,};
+    }
 }
