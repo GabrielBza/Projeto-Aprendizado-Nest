@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Tarefa, StatusTarefa } from './interfaces/tarefa.interface';
+import { CriarTarefaDto } from './dtos/criar-tarefa-dto';
 
 @Injectable()
 export class TarefasService {
@@ -36,5 +37,18 @@ export class TarefasService {
         }
         
         return tarefa;
+    }
+
+    criar(dados:CriarTarefaDto): Tarefa{
+        const novaTarefa: Tarefa = {
+            id: this.tarefas.length + 1,
+            titulo: dados.titulo,
+            descricao: dados.descricao,
+            status: dados.status
+        };
+
+        this.tarefas.push(novaTarefa);
+
+        return novaTarefa;
     }
 }
