@@ -1,16 +1,16 @@
-import { StatusTarefa } from "../interfaces/tarefa.interface";
-import { IsString, IsOptional, IsEnum } from "class-validator";
+import { StatusTarefa } from '../interfaces/tarefa.interface';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
 
-export class AtualizarTarefaDto{
-    @IsString()
-    @IsOptional()
-    titulo?: string;
+export class AtualizarTarefaDto {
+  @IsString()
+  @IsOptional()
+  titulo?: string;
 
-    @IsString()
-    @IsOptional()
-    descricao?: string;
+  @IsString()
+  @IsOptional()
+  descricao?: string;
 
-    @IsEnum(StatusTarefa)
-    @IsOptional()
-    status?: StatusTarefa;
+  @IsEnum(StatusTarefa)
+  @IsOptional()
+  status?: StatusTarefa;
 }

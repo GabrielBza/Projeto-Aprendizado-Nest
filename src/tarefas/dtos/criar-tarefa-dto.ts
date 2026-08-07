@@ -1,16 +1,16 @@
-import { StatusTarefa } from "../interfaces/tarefa.interface";
-import { IsString, IsNotEmpty, IsEnum } from "class-validator";
+import { StatusTarefa } from '../interfaces/tarefa.interface';
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
 
-export class CriarTarefaDto{
-    @IsString()
-    @IsNotEmpty()
-    titulo!: string;
+export class CriarTarefaDto {
+  @IsString()
+  @IsNotEmpty()
+  titulo!: string;
 
-    @IsString()
-    @IsNotEmpty()
-    descricao!: string;
+  @IsString()
+  @IsNotEmpty()
+  descricao!: string;
 
-    @IsEnum(StatusTarefa)
-    @IsNotEmpty()
-    status!: StatusTarefa;
+  @IsEnum(StatusTarefa)
+  @IsNotEmpty()
+  status!: StatusTarefa;
 }

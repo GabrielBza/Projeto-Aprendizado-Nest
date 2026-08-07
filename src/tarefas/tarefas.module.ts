@@ -4,6 +4,6 @@ import { TarefasController } from './tarefas.controller';
 
 @Module({
   providers: [TarefasService],
-  controllers: [TarefasController]
+  controllers: [TarefasController],
 })
 export class TarefasModule {}
