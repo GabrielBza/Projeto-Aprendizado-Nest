@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Tarefa, StatusTarefa } from './interfaces/tarefa.interface';
 
 @Injectable()
@@ -26,5 +26,15 @@ export class TarefasService {
 
     listarTodas(): Tarefa[]{
         return this.tarefas;
+    }
+
+    buscarPorId(id: number): Tarefa{
+        const tarefa = this.tarefas.find((tarefa) => tarefa.id === id);
+
+        if (!tarefa){
+            throw new NotFoundException("Tarefa não encontrada");
+        }
+        
+        return tarefa;
     }
 }
