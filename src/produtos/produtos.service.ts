@@ -69,4 +69,19 @@ export class ProdutosService {
 
     return produto;
   }
+
+  criar(dados: CriarProdutoDto): Produto {
+    const novoProduto: Produto = {
+      id: this.produtos.length + 1,
+      nome: dados.nome,
+      descricao: dados.descricao,
+      preco: dados.preco,
+      categoria: dados.categoria,
+      disponivel: dados.disponivel,
+    };
+
+    this.produtos.push(novoProduto);
+
+    return novoProduto;
+  }
 }
