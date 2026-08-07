@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Patch } from '@nestjs/common';
 import { TarefasService } from './tarefas.service';
 import type { Tarefa } from './interfaces/tarefa.interface';
 import { CriarTarefaDto } from './dtos/criar-tarefa-dto';
+import { AtualizarTarefaDto } from './dtos/atualizar-tarefa-dto';
 
 @Controller('tarefas')
 export class TarefasController {
@@ -20,5 +21,10 @@ export class TarefasController {
     @Post()
     criar(@Body() dados: CriarTarefaDto): Tarefa{
         return this.tarefasService.criar(dados);
+    }
+
+    @Patch(":id")
+    atualizar(@Param("id") id:string, @Body() dados:AtualizarTarefaDto): Tarefa{
+        return this.tarefasService.atualizar(Number(id), dados);
     }
 }
