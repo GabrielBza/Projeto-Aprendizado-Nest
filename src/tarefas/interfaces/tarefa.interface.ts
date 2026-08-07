@@ -8,5 +8,5 @@ export interface Tarefa {
 export enum StatusTarefa{
     CONCLUIDA = "CONCLUIDA",
     EM_ANDAMENTO = "EM_ANDAMENTO",
-    NAO_ATRIBUIDA = "NAO_ATRIBUIDA"
+    PENDENTE = "PENDENTE"
 }
