@@ -5,6 +5,7 @@ import {
   StatusCliente,
 } from './interfaces/cliente.interface';
 import { CriarClienteDto } from './dtos/criar-cliente-dto';
+import { AtualizarClienteDto } from './dtos/atualizar-cliente-dto';
 
 @Injectable()
 export class ClientesService {
@@ -86,5 +87,27 @@ export class ClientesService {
     this.clientes.push(novoCliente);
 
     return novoCliente;
+  }
+
+  atualizar(id: number, dados: AtualizarClienteDto): Cliente {
+    const cliente = this.buscarPorId(id);
+
+    if (dados.nome !== undefined) {
+      cliente.nome = dados.nome;
+    }
+    if (dados.email !== undefined) {
+      cliente.email = dados.email;
+    }
+    if (dados.idade !== undefined) {
+      cliente.idade = dados.idade;
+    }
+    if (dados.status !== undefined) {
+      cliente.status = dados.status;
+    }
+    if (dados.tipo !== undefined) {
+      cliente.tipo = dados.tipo;
+    }
+
+    return cliente;
   }
 }
