@@ -110,4 +110,15 @@ export class ClientesService {
 
     return cliente;
   }
+
+  deletar(id: number): { mensagem: string; cliente: Cliente } {
+    const cliente = this.buscarPorId(id);
+    const indiceCliente = this.clientes.indexOf(cliente);
+
+    this.clientes.splice(indiceCliente, 1);
+    return {
+      mensagem: 'O cliente foi deletado com sucesso!',
+      cliente: cliente,
+    };
+  }
 }
