@@ -75,14 +75,27 @@ export class ClientesService {
   }
 
   criar(dados: CriarClienteDto): Cliente {
-    const novoCliente: Cliente = {
-      id: this.clientes.length + 1,
-      nome: dados.nome,
-      email: dados.email,
-      idade: dados.idade,
-      status: StatusCliente.ATIVO,
-      tipo: dados.tipo,
-    };
+    let novoCliente: Cliente;
+
+    if (this.clientes.length === 0) {
+      novoCliente = {
+        id: 1,
+        nome: dados.nome,
+        email: dados.email,
+        idade: dados.idade,
+        status: StatusCliente.ATIVO,
+        tipo: dados.tipo,
+      };
+    } else {
+      novoCliente = {
+        id: this.clientes[this.clientes.length - 1].id + 1,
+        nome: dados.nome,
+        email: dados.email,
+        idade: dados.idade,
+        status: StatusCliente.ATIVO,
+        tipo: dados.tipo,
+      };
+    }
 
     this.clientes.push(novoCliente);
 

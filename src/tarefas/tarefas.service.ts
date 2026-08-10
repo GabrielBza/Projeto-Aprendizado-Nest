@@ -44,12 +44,23 @@ export class TarefasService {
   }
 
   criar(dados: CriarTarefaDto): Tarefa {
-    const novaTarefa: Tarefa = {
-      id: this.tarefas.length + 1,
-      titulo: dados.titulo,
-      descricao: dados.descricao,
-      status: dados.status,
-    };
+    let novaTarefa: Tarefa;
+
+    if (this.tarefas.length === 0) {
+      novaTarefa = {
+        id: 1,
+        titulo: dados.titulo,
+        descricao: dados.descricao,
+        status: dados.status,
+      };
+    } else {
+      novaTarefa = {
+        id: this.tarefas[this.tarefas.length - 1].id + 1,
+        titulo: dados.titulo,
+        descricao: dados.descricao,
+        status: dados.status,
+      };
+    }
 
     this.tarefas.push(novaTarefa);
 

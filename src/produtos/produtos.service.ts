@@ -71,14 +71,27 @@ export class ProdutosService {
   }
 
   criar(dados: CriarProdutoDto): Produto {
-    const novoProduto: Produto = {
-      id: this.produtos.length + 1,
-      nome: dados.nome,
-      descricao: dados.descricao,
-      preco: dados.preco,
-      categoria: dados.categoria,
-      disponivel: dados.disponivel,
-    };
+    let novoProduto: Produto;
+
+    if (this.produtos.length === 0) {
+      novoProduto = {
+        id: 1,
+        nome: dados.nome,
+        descricao: dados.descricao,
+        preco: dados.preco,
+        categoria: dados.categoria,
+        disponivel: dados.disponivel,
+      };
+    } else {
+      novoProduto = {
+        id: this.produtos[this.produtos.length - 1].id + 1,
+        nome: dados.nome,
+        descricao: dados.descricao,
+        preco: dados.preco,
+        categoria: dados.categoria,
+        disponivel: dados.disponivel,
+      };
+    }
 
     this.produtos.push(novoProduto);
 
