@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
-import { Cliente } from './interfaces/cliente.interface';
+import type { Cliente } from './interfaces/cliente.interface';
 
 @Controller('clientes')
 export class ClientesController {
@@ -9,5 +9,10 @@ export class ClientesController {
   @Get()
   listarTodos(): Cliente[] {
     return this.clientesService.listarTodos();
+  }
+
+  @Get(':id')
+  buscarPorId(@Param('id') id: string): Cliente {
+    return this.clientesService.buscarPorId(Number(id));
   }
 }

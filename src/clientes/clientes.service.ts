@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   Cliente,
   TipoCliente,
@@ -60,5 +60,15 @@ export class ClientesService {
 
   listarTodos(): Cliente[] {
     return this.clientes;
+  }
+
+  buscarPorId(id: number): Cliente {
+    const cliente = this.clientes.find((cliente) => cliente.id === id);
+
+    if (!cliente) {
+      throw new NotFoundException('Cliente não encontrado!');
+    }
+
+    return cliente;
   }
 }
