@@ -4,6 +4,7 @@ import {
   TipoCliente,
   StatusCliente,
 } from './interfaces/cliente.interface';
+import { CriarClienteDto } from './dtos/criar-cliente-dto';
 
 @Injectable()
 export class ClientesService {
@@ -70,5 +71,20 @@ export class ClientesService {
     }
 
     return cliente;
+  }
+
+  criar(dados: CriarClienteDto): Cliente {
+    const novoCliente: Cliente = {
+      id: this.clientes.length + 1,
+      nome: dados.nome,
+      email: dados.email,
+      idade: dados.idade,
+      status: StatusCliente.ATIVO,
+      tipo: dados.tipo,
+    };
+
+    this.clientes.push(novoCliente);
+
+    return novoCliente;
   }
 }
