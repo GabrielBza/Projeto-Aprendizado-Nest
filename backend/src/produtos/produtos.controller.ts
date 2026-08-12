@@ -4,11 +4,12 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
 import { ProdutosService } from './produtos.service';
-import type { Produto } from './interfaces/produto.interface';
+import { ProdutoEntity } from './produto.entity';
 import { CriarProdutoDto } from './dtos/criar-produto-dto';
 import { AtualizarProdutoDto } from './dtos/atualizar-produto-dto';
 
@@ -17,30 +18,30 @@ export class ProdutosController {
   constructor(private readonly produtosService: ProdutosService) {}
 
   @Get()
-  listarTodos(): Produto[] {
+  listarTodos(): Promise<ProdutoEntity[]> {
     return this.produtosService.listarTodos();
   }
 
   @Get(':id')
-  buscarPorId(@Param('id') id: string): Produto {
-    return this.produtosService.buscarPorId(Number(id));
+  buscarPorId(@Param('id', ParseIntPipe) id: number): Promise<ProdutoEntity> {
+    return this.produtosService.buscarPorId(id);
   }
 
   @Post()
-  criar(@Body() dados: CriarProdutoDto): Produto {
+  criar(@Body() dados: CriarProdutoDto): Promise<ProdutoEntity> {
     return this.produtosService.criar(dados);
   }
 
   @Patch(':id')
   atualiar(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() dados: AtualizarProdutoDto,
-  ): Produto {
-    return this.produtosService.atualizar(Number(id), dados);
+  ): Promise<ProdutoEntity> {
+    return this.produtosService.atualizar(id, dados);
   }
 
   @Delete(':id')
-  deletar(@Param('id') id: string) {
-    return this.produtosService.deletar(Number(id));
+  deletar(@Param('id', ParseIntPipe) id: number) {
+    return this.produtosService.deletar(id);
   }
 }

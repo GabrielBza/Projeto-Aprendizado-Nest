@@ -5,7 +5,7 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
-import { CategoriaProduto } from '../interfaces/produto.interface';
+import { CategoriaProduto } from '../enums/categoria_produto.enum';
 
 export class CriarProdutoDto {
   @IsString()
@@ -25,6 +25,5 @@ export class CriarProdutoDto {
   categoria!: CategoriaProduto;
 
   @IsBoolean()
-  @IsNotEmpty()
   disponivel!: boolean;
 }

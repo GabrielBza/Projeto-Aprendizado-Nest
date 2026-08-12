@@ -5,7 +5,7 @@ import {
   IsNumber,
   IsBoolean,
 } from 'class-validator';
-import { CategoriaProduto } from '../interfaces/produto.interface';
+import { CategoriaProduto } from '../enums/categoria_produto.enum';
 
 export class AtualizarProdutoDto {
   @IsOptional()
