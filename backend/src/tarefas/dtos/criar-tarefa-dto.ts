@@ -1,4 +1,4 @@
-import { StatusTarefa } from '../interfaces/tarefa.interface';
+import { StatusTarefa } from '../enums/status-tarefa.enum';
 import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
 
 export class CriarTarefaDto {

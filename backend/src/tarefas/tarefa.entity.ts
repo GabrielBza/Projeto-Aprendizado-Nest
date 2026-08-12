@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { StatusTarefa } from './interfaces/tarefa.interface';
+import { StatusTarefa } from './enums/status-tarefa.enum';
 
 @Entity('tarefas')
 export class TarefaEntity {
