@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ./projeto-aprendizado-nest
+      context: ./backend
 
     container_name: nest-backend
 
@@ -9,7 +9,7 @@ services:
       - "3000:3000"
 
     volumes:
-      - ./projeto-aprendizado-nest:/app
+      - ./backend:/app
       - node_modules_backend:/app/node_modules
 
     command: npm run start:dev
