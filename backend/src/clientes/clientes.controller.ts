@@ -4,11 +4,12 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
-import type { Cliente } from './interfaces/cliente.interface';
+import { ClienteEntity } from './cliente.entity';
 import { CriarClienteDto } from './dtos/criar-cliente-dto';
 import { AtualizarClienteDto } from './dtos/atualizar-cliente-dto';
 
@@ -17,30 +18,30 @@ export class ClientesController {
   constructor(private readonly clientesService: ClientesService) {}
 
   @Get()
-  listarTodos(): Cliente[] {
+  listarTodos(): Promise<ClienteEntity[]> {
     return this.clientesService.listarTodos();
   }
 
   @Get(':id')
-  buscarPorId(@Param('id') id: string): Cliente {
-    return this.clientesService.buscarPorId(Number(id));
+  buscarPorId(@Param('id', ParseIntPipe) id: number): Promise<ClienteEntity> {
+    return this.clientesService.buscarPorId(id);
   }
 
   @Post()
-  criar(@Body() dados: CriarClienteDto): Cliente {
+  criar(@Body() dados: CriarClienteDto): Promise<ClienteEntity> {
     return this.clientesService.criar(dados);
   }
 
   @Patch(':id')
   atualizar(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() dados: AtualizarClienteDto,
-  ): Cliente {
-    return this.clientesService.atualizar(Number(id), dados);
+  ): Promise<ClienteEntity> {
+    return this.clientesService.atualizar(id, dados);
   }
 
   @Delete(':id')
-  deletar(@Param('id') id: string) {
-    return this.clientesService.deletar(Number(id));
+  deletar(@Param('id', ParseIntPipe) id: number) {
+    return this.clientesService.deletar(id);
   }
 }

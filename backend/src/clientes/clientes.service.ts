@@ -1,71 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  Cliente,
-  TipoCliente,
-  StatusCliente,
-} from './interfaces/cliente.interface';
+import { ClienteEntity } from './cliente.entity';
 import { CriarClienteDto } from './dtos/criar-cliente-dto';
 import { AtualizarClienteDto } from './dtos/atualizar-cliente-dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ClientesService {
-  private clientes: Cliente[] = [
-    {
-      id: 1,
-      nome: 'Ana Souza',
-      email: 'ana.souza@email.com',
-      idade: 28,
-      status: StatusCliente.ATIVO,
-      tipo: TipoCliente.PREMIUM,
-    },
-    {
-      id: 2,
-      nome: 'Bruno Lima',
-      email: 'bruno.lima@email.com',
-      idade: 34,
-      status: StatusCliente.ATIVO,
-      tipo: TipoCliente.PADRAO,
-    },
-    {
-      id: 3,
-      nome: 'Carla Mendes',
-      email: 'carla.mendes@email.com',
-      idade: 41,
-      status: StatusCliente.INATIVO,
-      tipo: TipoCliente.EMPRESARIAL,
-    },
-    {
-      id: 4,
-      nome: 'Diego Alves',
-      email: 'diego.alves@email.com',
-      idade: 23,
-      status: StatusCliente.ATIVO,
-      tipo: TipoCliente.PADRAO,
-    },
-    {
-      id: 5,
-      nome: 'Empresa Horizonte LTDA',
-      email: 'contato@horizonteltda.com',
-      idade: 12,
-      status: StatusCliente.ATIVO,
-      tipo: TipoCliente.EMPRESARIAL,
-    },
-    {
-      id: 6,
-      nome: 'Fernanda Rocha',
-      email: 'fernanda.rocha@email.com',
-      idade: 30,
-      status: StatusCliente.INATIVO,
-      tipo: TipoCliente.PREMIUM,
-    },
-  ];
+  constructor(
+    @InjectRepository(ClienteEntity)
+    private readonly clientesRepository: Repository<ClienteEntity>,
+  ) {}
 
-  listarTodos(): Cliente[] {
-    return this.clientes;
+  async listarTodos(): Promise<ClienteEntity[]> {
+    return this.clientesRepository.find();
   }
 
-  buscarPorId(id: number): Cliente {
-    const cliente = this.clientes.find((cliente) => cliente.id === id);
+  async buscarPorId(id: number): Promise<ClienteEntity> {
+    const cliente = await this.clientesRepository.findOneBy({ id });
 
     if (!cliente) {
       throw new NotFoundException('Cliente não encontrado!');
@@ -74,61 +26,28 @@ export class ClientesService {
     return cliente;
   }
 
-  criar(dados: CriarClienteDto): Cliente {
-    let novoCliente: Cliente;
+  async criar(dados: CriarClienteDto): Promise<ClienteEntity> {
+    const novoCliente = this.clientesRepository.create(dados);
 
-    if (this.clientes.length === 0) {
-      novoCliente = {
-        id: 1,
-        nome: dados.nome,
-        email: dados.email,
-        idade: dados.idade,
-        status: StatusCliente.ATIVO,
-        tipo: dados.tipo,
-      };
-    } else {
-      novoCliente = {
-        id: this.clientes[this.clientes.length - 1].id + 1,
-        nome: dados.nome,
-        email: dados.email,
-        idade: dados.idade,
-        status: StatusCliente.ATIVO,
-        tipo: dados.tipo,
-      };
-    }
-
-    this.clientes.push(novoCliente);
-
-    return novoCliente;
+    return this.clientesRepository.save(novoCliente);
   }
 
-  atualizar(id: number, dados: AtualizarClienteDto): Cliente {
-    const cliente = this.buscarPorId(id);
+  async atualizar(
+    id: number,
+    dados: AtualizarClienteDto,
+  ): Promise<ClienteEntity> {
+    const cliente = await this.buscarPorId(id);
 
-    if (dados.nome !== undefined) {
-      cliente.nome = dados.nome;
-    }
-    if (dados.email !== undefined) {
-      cliente.email = dados.email;
-    }
-    if (dados.idade !== undefined) {
-      cliente.idade = dados.idade;
-    }
-    if (dados.status !== undefined) {
-      cliente.status = dados.status;
-    }
-    if (dados.tipo !== undefined) {
-      cliente.tipo = dados.tipo;
-    }
-
-    return cliente;
+    Object.assign(cliente, dados);
+    return this.clientesRepository.save(cliente);
   }
 
-  deletar(id: number): { mensagem: string; cliente: Cliente } {
-    const cliente = this.buscarPorId(id);
-    const indiceCliente = this.clientes.indexOf(cliente);
+  async deletar(
+    id: number,
+  ): Promise<{ mensagem: string; cliente: ClienteEntity }> {
+    const cliente = await this.buscarPorId(id);
 
-    this.clientes.splice(indiceCliente, 1);
+    await this.clientesRepository.delete(cliente);
     return {
       mensagem: 'O cliente foi deletado com sucesso!',
       cliente: cliente,

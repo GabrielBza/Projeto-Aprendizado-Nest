@@ -1,5 +1,6 @@
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { StatusCliente, TipoCliente } from '../interfaces/cliente.interface';
+import { StatusCliente } from '../enums/status-cliente.enum';
+import { TipoCliente } from '../enums/tipo-cliente.enum';
 
 export class AtualizarClienteDto {
   @IsString()

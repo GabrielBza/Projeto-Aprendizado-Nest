@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { TipoCliente } from '../interfaces/cliente.interface';
+import { TipoCliente } from '../enums/tipo-cliente.enum';
 
 export class CriarClienteDto {
   @IsString()
