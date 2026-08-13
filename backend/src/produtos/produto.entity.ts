@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CategoriaProduto } from './enums/categoria_produto.enum';
+import { PedidoEntity } from 'src/pedidos/pedido.entity';
 
 @Entity('produtos')
 export class ProdutoEntity {
@@ -20,4 +21,7 @@ export class ProdutoEntity {
 
   @Column({ default: true })
   disponivel!: boolean;
+
+  @OneToMany(() => PedidoEntity, (pedido) => pedido.produto)
+  pedidos!: PedidoEntity[];
 }

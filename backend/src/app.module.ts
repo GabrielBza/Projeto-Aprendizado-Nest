@@ -5,6 +5,7 @@ import { DatabaseModule } from './database/database.module';
 import { TarefasModule } from './tarefas/tarefas.module';
 import { ProdutosModule } from './produtos/produtos.module';
 import { ClientesModule } from './clientes/clientes.module';
+import { PedidosModule } from './pedidos/pedidos.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ClientesModule } from './clientes/clientes.module';
       isGlobal: true,
     }),
     DatabaseModule,
+    PedidosModule,
   ],
   controllers: [],
   providers: [],

@@ -12,6 +12,6 @@ export class TarefaEntity {
   @Column()
   descricao!: string;
 
-  @Column({ type: 'enum', enum: StatusTarefa })
+  @Column({ type: 'enum', enum: StatusTarefa, default: StatusTarefa.PENDENTE })
   status!: StatusTarefa;
 }
