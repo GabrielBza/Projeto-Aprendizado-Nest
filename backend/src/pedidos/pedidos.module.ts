@@ -3,8 +3,8 @@ import { PedidosService } from './pedidos.service';
 import { PedidosController } from './pedidos.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PedidoEntity } from './pedido.entity';
-import { ProdutoEntity } from 'src/produtos/produto.entity';
-import { ClienteEntity } from 'src/clientes/cliente.entity';
+import { ProdutoEntity } from '../produtos/produto.entity';
+import { ClienteEntity } from '../clientes/cliente.entity';
 
 @Module({
   imports: [

@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { StatusCliente } from './enums/status-cliente.enum';
 import { TipoCliente } from './enums/tipo-cliente.enum';
-import { PedidoEntity } from 'src/pedidos/pedido.entity';
+import { PedidoEntity } from '../pedidos/pedido.entity';
 
 @Entity('clientes')
 export class ClienteEntity {

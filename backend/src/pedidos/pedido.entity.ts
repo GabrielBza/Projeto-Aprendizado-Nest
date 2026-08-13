@@ -1,5 +1,5 @@
-import { ClienteEntity } from 'src/clientes/cliente.entity';
-import { ProdutoEntity } from 'src/produtos/produto.entity';
+import { ClienteEntity } from '../clientes/cliente.entity';
+import { ProdutoEntity } from '../produtos/produto.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { StatusPedido } from './enums/status-pedido.enum';
 

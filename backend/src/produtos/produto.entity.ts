@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CategoriaProduto } from './enums/categoria_produto.enum';
-import { PedidoEntity } from 'src/pedidos/pedido.entity';
+import { PedidoEntity } from '../pedidos/pedido.entity';
 
 @Entity('produtos')
 export class ProdutoEntity {
