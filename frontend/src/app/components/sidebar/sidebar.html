@@ -1,0 +1,16 @@
+<div class="sidebar">
+  <h2 class="logo">Origem</h2>
+  <aside class="sidebar">
+    <nav class="navegacao">
+      <a class="opcao_navegacao" routerLink="/" routerLinkActive="ativo">Dashboard</a>
+      <a class="opcao_navegacao" routerLink="/clientes" routerLinkActive="ativo">Clientes</a>
+      <a class="opcao_navegacao" routerLink="/pedidos" routerLinkActive="ativo">Pedidos</a>
+      <a class="opcao_navegacao" routerLink="/produtos" routerLinkActive="ativo">Produtos</a>
+      <a class="opcao_navegacao" routerLink="/tarefas" routerLinkActive="ativo">Tarefas</a>
+    </nav>
+
+    <div class="sair">
+      <app-botao texto="Sair" tipo="secundario" (clicado)="aoSair()"></app-botao>
+    </div>
+  </aside>
+</div>

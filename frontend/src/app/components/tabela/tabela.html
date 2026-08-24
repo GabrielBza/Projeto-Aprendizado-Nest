@@ -1,0 +1,34 @@
+<div class="tabela-container">
+  <table class="tabela">
+    <thead>
+      <tr>
+        @for (coluna of colunas; track coluna.campo) {
+          <th>{{ coluna.titulo }}</th>
+        }
+
+        @if (mostrarBotoes) {
+          <th></th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (linha of dados; track linha.id) {
+        <tr>
+          @for (coluna of colunas; track coluna.campo) {
+            <td>{{ valorCelula(linha, coluna.campo) }}</td>
+          }
+
+          @if (mostrarBotoes) {
+            <td>
+              <div class="botoes">
+                <app-botao-editar (clicado)="aoEditar(linha.id)"></app-botao-editar>
+                <app-botao-deletar (clicado)="aoDeletar(linha.id)"></app-botao-deletar>
+              </div>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

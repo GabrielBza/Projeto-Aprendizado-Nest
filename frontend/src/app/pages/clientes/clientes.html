@@ -1,0 +1,151 @@
+<div class="pagina">
+  <div class="topo">
+    <div class="cabecalho">
+      <h1 class="titulo">Clientes</h1>
+      <p class="subtitulo">Gerencie e visualize os clientes do sistema</p>
+    </div>
+    <div class="contador">
+      <h2 class="quantidade">Quantidade</h2>
+      <p class="valor">{{ clientes().length }}</p>
+    </div>
+  </div>
+  <div class="corpo">
+    <div class="interacoes">
+      <app-botao
+        texto="Novo Cliente"
+        tipo="primario"
+        (clicado)="alterarModal('criacao', true)"
+      ></app-botao>
+      <app-input
+        placeholder="Digite o nome do cliente..."
+        (trocaValor)="buscarClientes($event)"
+      ></app-input>
+    </div>
+    <app-tabela
+      [colunas]="colunas"
+      [dados]="clientes()"
+      [mostrarBotoes]="true"
+      (editar)="abrirEdicao($event)"
+      (deletar)="abrirDelecao($event)"
+    >
+    </app-tabela>
+  </div>
+</div>
+
+@if (modalCriacaoAberto) {
+  <app-modal titulo="Novo Cliente" (fechar)="alterarModal('criacao', false)">
+    <div class="formulario-criacao">
+      <div class="campos">
+        <app-input
+          label="Nome"
+          placeholder="Digite o nome do cliente"
+          (trocaValor)="nomeNovoCliente = $event"
+        >
+        </app-input>
+        <app-input
+          label="Email"
+          placeholder="Digite o email do cliente"
+          (trocaValor)="emailNovoCliente = $event"
+        ></app-input>
+        <app-input
+          label="Idade"
+          placeholder="Digite a idade do cliente"
+          (trocaValor)="idadeNovoCliente = $event"
+        ></app-input>
+        <app-select label="Tipo" (trocaValor)="tipoNovoCliente = $event">
+          <option value="" disabled selected>Selecione o tipo</option>
+          <option value="PADRAO">Padrão</option>
+          <option value="PREMIUM">Premium</option>
+          <option value="EMPRESARIAL">Empresarial</option>
+        </app-select>
+        <app-select label="Status" (trocaValor)="statusNovoCliente = $event">
+          <option value="" disabled selected>Selecione o status</option>
+          <option value="ATIVO">Ativo</option>
+          <option value="INATIVO">Inativo</option>
+        </app-select>
+      </div>
+
+      @if (erroCriacao) {
+        <p class="erro-formulario">
+          {{ erroCriacao }}
+        </p>
+      }
+
+      <div class="acoes-form">
+        <app-botao
+          texto="Cancelar"
+          tipo="secundario"
+          (clicado)="alterarModal('criacao', false)"
+        ></app-botao>
+        <app-botao texto="Salvar" tipo="primario" (clicado)="criarCliente()"></app-botao>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (modalEdicaoAberto) {
+  <app-modal titulo="Editar Cliente" (fechar)="alterarModal('edicao', false)">
+    <div class="formulario-criacao">
+      <div class="campos">
+        <app-input
+          label="Nome"
+          [valor]="nomeClienteEdicao"
+          placeholder="Digite o nome do cliente"
+          (trocaValor)="nomeClienteEdicao = $event"
+        >
+        </app-input>
+        <app-input
+          label="Email"
+          [valor]="emailClienteEdicao"
+          placeholder="Digite o email do cliente"
+          (trocaValor)="emailClienteEdicao = $event"
+        ></app-input>
+        <app-input
+          label="Idade"
+          [valor]="idadeClienteEdicao"
+          placeholder="Digite a idade do cliente"
+          (trocaValor)="idadeClienteEdicao = $event"
+        ></app-input>
+        <app-select
+          label="Tipo"
+          [valor]="tipoClienteEdicao"
+          (trocaValor)="tipoClienteEdicao = $event"
+        >
+          <option value="" disabled selected>Selecione o tipo</option>
+          <option value="PADRAO">Padrão</option>
+          <option value="PREMIUM">Premium</option>
+          <option value="EMPRESARIAL">Empresarial</option>
+        </app-select>
+        <app-select
+          label="Status"
+          [valor]="statusClienteEdicao"
+          (trocaValor)="statusClienteEdicao = $event"
+        >
+          <option value="" disabled selected>Selecione o status</option>
+          <option value="ATIVO">Ativo</option>
+          <option value="INATIVO">Inativo</option>
+        </app-select>
+      </div>
+
+      @if (erroCriacao) {
+        <p class="erro-formulario">
+          {{ erroCriacao }}
+        </p>
+      }
+
+      <div class="acoes-form">
+        <app-botao
+          texto="Cancelar"
+          tipo="secundario"
+          (clicado)="alterarModal('edicao', false)"
+        ></app-botao>
+        <app-botao texto="Salvar" tipo="primario" (clicado)="editarCliente()"></app-botao>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (popUpDelecaoAberto) {
+  <app-popup-dialog (confirmar)="deletarCliente()" (cancelar)="alterarPopUp(false)">
+  </app-popup-dialog>
+}

@@ -1,0 +1,149 @@
+<div class="pagina">
+  <div class="topo">
+    <div class="cabecalho">
+      <h1 class="titulo">Produtos</h1>
+      <p class="subtitulo">Gerencie e visualize os produtos do sistema</p>
+    </div>
+    <div class="contador">
+      <h2 class="quantidade">Quantidade</h2>
+      <p class="valor">{{ produtos().length }}</p>
+    </div>
+  </div>
+  <div class="corpo">
+    <div class="interacoes">
+      <app-botao
+        texto="Novo Produto"
+        tipo="primario"
+        (clicado)="alterarModal('criacao', true)"
+        (editar)="alterarModal('edicao', true)"
+      ></app-botao>
+      <app-input
+        placeholder="Digite o nome do produto..."
+        (trocaValor)="buscarProdutos($event)"
+      ></app-input>
+    </div>
+    <app-tabela
+      [colunas]="colunas"
+      [dados]="produtos()"
+      [mostrarBotoes]="true"
+      (editar)="abrirEdicao($event)"
+      (deletar)="abrirDelecao($event)"
+    ></app-tabela>
+  </div>
+</div>
+
+@if (modalCriacaoAberto) {
+  <app-modal titulo="Novo Produto" (fechar)="alterarModal('criacao', false)">
+    <div class="formulario">
+      <app-input
+        label="Nome"
+        placeholder="Digite o nome do produto"
+        (trocaValor)="modalNomeProduto = $event"
+      ></app-input>
+      <app-input
+        label="Descricao"
+        placeholder="Digite a descricao do produto"
+        (trocaValor)="modalDescricaoProduto = $event"
+      ></app-input>
+      <app-input
+        label="Preço"
+        placeholder="Digite o preço do produto"
+        (trocaValor)="modalPrecoProduto = $event"
+      ></app-input>
+      <app-select label="Categoria" (trocaValor)="modalCategoriaProduto = $event">
+        <option value="" disabled selected>Selecione a categoria</option>
+        <option value="ELETRONICO">Eletrônico</option>
+        <option value="ALIMENTO">Alimento</option>
+        <option value="ROUPA">Roupa</option>
+        <option value="BRINQUEDO">Brinquedo</option>
+        <option value="HIGIENE">Higiene</option>
+      </app-select>
+      <div class="checkboxDisponibilidade">
+        <label for="disponivel"> Disponível </label>
+        <input
+          type="checkbox"
+          id="disponivel"
+          [checked]="modalDisponivelProduto"
+          (change)="alterarDispoibilidade($event)"
+        />
+      </div>
+
+      @if (erro) {
+        <p class="erro-formulario">{{ erro }}</p>
+      }
+
+      <div class="acoes-form">
+        <app-botao
+          texto="Cancelar"
+          tipo="secundario"
+          (clicado)="alterarModal('criacao', false)"
+        ></app-botao>
+        <app-botao texto="Salvar" tipo="primario" (clicado)="criarProduto()"></app-botao>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (modalEdicaoAberto) {
+  <app-modal titulo="" (fechar)="alterarModal('edicao', false)">
+    <div class="formulario">
+      <div class="campos">
+        <app-input
+          label="Nome"
+          placeholder="Digite o nome do produto"
+          (trocaValor)="modalNomeProduto = $event"
+        ></app-input>
+        <app-input
+          label="Descrição"
+          placeholder="Digite a descricao do produto"
+          (trocaValor)="modalDescricaoProduto = $event"
+        ></app-input>
+        <app-input
+          label="Preço"
+          placeholder="Digite o preço do produto"
+          (trocaValor)="modalPrecoProduto = $event"
+        ></app-input>
+        <app-select label="Categoria" (trocaValor)="modalCategoriaProduto = $event">
+          <option value="" disabled selected>Selecione a categoria</option>
+          <option value="ELETRONICO">Eletrônico</option>
+          <option value="ALIMENTO">Alimento</option>
+          <option value="ROUPA">Roupa</option>
+          <option value="BRINQUEDO">Brinquedo</option>
+          <option value="HIGIENE">Higiene</option>
+        </app-select>
+
+        <div class="checkboxDisponibilidade">
+          <label for="disponivel"> Disponível </label>
+          <input
+            type="checkbox"
+            id="disponivel"
+            [checked]="modalDisponivelProduto"
+            (change)="alterarDispoibilidade($event)"
+          />
+        </div>
+      </div>
+
+      @if (erro) {
+        <p class="erro-formulario">
+          {{ erro }}
+        </p>
+      }
+
+      <div class="acoes-form">
+        <app-botao
+          texto="Cancelar"
+          tipo="secundario"
+          (clicado)="alterarModal('edicao', false)"
+        ></app-botao>
+        <app-botao texto="Salvar" tipo="primario" (clicado)="editarProduto()"></app-botao>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (popupDelecaoAberto) {
+  <app-popup-dialog
+    (confirmar)="deletarProduto()"
+    (cancelar)="alterarPopUp(false)"
+  ></app-popup-dialog>
+}

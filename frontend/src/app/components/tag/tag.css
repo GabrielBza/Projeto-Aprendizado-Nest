@@ -1,0 +1,102 @@
+.tag {
+  display: inline-block;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.concluida {
+  background-color: var(--color-salvia);
+  color: var(--color-petroleo);
+}
+
+.em_andamento {
+  background-color: var(--color-azul-po);
+  color: var(--color-petroleo);
+}
+
+.pendente {
+  background-color: var(--color-champagne);
+  color: var(--color-petroleo);
+}
+
+.eletronico {
+  background-color: var(--color-azul-po);
+  color: var(--color-petroleo);
+}
+
+.alimento {
+  background-color: var(--color-salvia);
+  color: var(--color-petroleo);
+}
+
+.roupa {
+  background-color: var(--color-champagne);
+  color: var(--color-petroleo);
+}
+
+.brinquedo {
+  background-color: var(--color-marfim);
+  color: var(--color-petroleo);
+}
+
+.higiene {
+  background-color: var(--color-neblina);
+  color: var(--color-petroleo);
+}
+
+.entregue {
+  background-color: var(--color-salvia);
+  color: var(--color-petroleo);
+}
+
+.a_caminho {
+  background-color: var(--color-azul-po);
+  color: var(--color-petroleo);
+}
+
+.atrasado {
+  background-color: var(--color-champagne);
+  color: var(--color-petroleo);
+}
+
+.cancelado {
+  background-color: var(--color-perigo);
+  color: white;
+}
+
+.confirmado {
+  background-color: var(--color-petroleo);
+  color: var(--color-marfim);
+}
+
+.ativo {
+  background-color: var(--color-salvia);
+  color: var(--color-petroleo);
+}
+
+.inativo {
+  background-color: var(--color-neblina);
+  color: var(--color-texto-suave);
+}
+
+.padrao {
+  background-color: var(--color-neblina);
+  color: var(--color-texto-suave);
+}
+
+.premium {
+  background-color: var(--color-champagne);
+  color: var(--color-petroleo);
+}
+
+.empresarial {
+  background-color: var(--color-petroleo);
+  color: var(--color-marfim);
+}

@@ -1,0 +1,23 @@
+<div class="overlay">
+  <div class="modal">
+    <div class="cabecalho">
+      <h2>{{ titulo }}</h2>
+
+      <button class="fechar" (click)="aoFechar()">×</button>
+    </div>
+
+    <div class="conteudo">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="acoes">
+      <div class="acoes_esquerda">
+        <ng-content select="[modal-actions-left]"></ng-content>
+      </div>
+
+      <div class="acoes_direita">
+        <ng-content select="[modal-actions-right]"></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+.tabela-container {
+  width: 100%;
+  max-height: 100%;
+
+  overflow-y: auto;
+  overflow-x: auto;
+
+  border-radius: 8px;
+
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.botoes {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+}
+
+.tabela {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  background-color: white;
+}
+
+th,
+td {
+  padding: 14px 16px;
+
+  text-align: left;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-champagne);
+
+  color: var(--color-petroleo);
+
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 1;
+}
+
+td {
+  color: var(--color-texto-suave);
+
+  border-bottom: 1px solid var(--color-neblina);
+}
+
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: var(--color-marfim);
+}

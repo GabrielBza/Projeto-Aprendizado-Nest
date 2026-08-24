@@ -3,7 +3,7 @@ import { CriarProdutoDto } from './dtos/criar-produto-dto';
 import { AtualizarProdutoDto } from './dtos/atualizar-produto-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProdutoEntity } from './produto.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class ProdutosService {
@@ -12,7 +12,15 @@ export class ProdutosService {
     private readonly produtosRepository: Repository<ProdutoEntity>,
   ) {}
 
-  async listarTodos(): Promise<ProdutoEntity[]> {
+  async listar(nome?: string): Promise<ProdutoEntity[]> {
+    if (nome && nome.trim() !== '') {
+      return this.produtosRepository.find({
+        where: {
+          nome: Like(`%${nome.trim()}%`),
+        },
+      });
+    }
+
     return this.produtosRepository.find();
   }
 

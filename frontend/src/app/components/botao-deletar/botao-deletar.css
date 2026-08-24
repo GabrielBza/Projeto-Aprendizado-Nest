@@ -1,0 +1,27 @@
+.botao-excluir {
+  padding: 6px 10px;
+
+  border: none;
+  border-radius: 6px;
+
+  background-color: var(--color-perigo);
+  color: white;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.botao-excluir:hover {
+  transform: scale(1.05);
+}
+
+.botao-excluir:active {
+  transform: scale(0.98);
+}

@@ -1,0 +1,7 @@
+<div class="campo">
+  <label>{{ label }}</label>
+
+  <select [value]="valor" (change)="aoSelecionar($event)">
+    <ng-content></ng-content>
+  </select>
+</div>

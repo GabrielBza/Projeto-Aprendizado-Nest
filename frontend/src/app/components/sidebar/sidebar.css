@@ -1,0 +1,44 @@
+.sidebar {
+  width: 240px;
+  height: 100vh;
+
+  padding: 24px 18px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  background-color: var(--color-petroleo);
+}
+
+.opcao_navegacao {
+  display: block;
+
+  padding: 12px 14px;
+
+  border-radius: 8px;
+
+  color: var(--color-salvia);
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.navegacao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 30px;
+}
+
+.sair {
+  margin-top: auto;
+}
+
+.logo {
+  color: var(--color-champagne);
+}

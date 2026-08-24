@@ -1,0 +1,7 @@
+<div class="campo">
+  @if (label && label.trim() !== '') {
+    <label>{{ label }}</label>
+  }
+
+  <input [type]="tipo" [placeholder]="placeholder" [value]="valor" (input)="aoDigitar($event)" />
+</div>

@@ -1,0 +1,54 @@
+:host {
+  display: inline-block;
+}
+
+.botao {
+  width: 100%;
+
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.botao:hover:not(:disabled) {
+  transform: scale(1.03);
+}
+
+.botao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primario {
+  background-color: var(--color-petroleo);
+  color: var(--color-marfim);
+}
+
+.primario:hover.botao:hover:not(:disabled) {
+  background-color: var(--color-petroleo-suave);
+}
+
+.secundario {
+  background-color: var(--color-neblina);
+  color: var(--color-petroleo);
+}
+
+.secundario:hover:not(:disabled) {
+  background-color: var(--color-salvia);
+}
+
+.perigo {
+  background-color: var(--color-perigo);
+  color: white;
+}

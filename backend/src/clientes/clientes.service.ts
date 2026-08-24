@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ClienteEntity } from './cliente.entity';
 import { CriarClienteDto } from './dtos/criar-cliente-dto';
 import { AtualizarClienteDto } from './dtos/atualizar-cliente-dto';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -12,7 +12,15 @@ export class ClientesService {
     private readonly clientesRepository: Repository<ClienteEntity>,
   ) {}
 
-  async listarTodos(): Promise<ClienteEntity[]> {
+  async listar(nome?: string): Promise<ClienteEntity[]> {
+    if (nome && nome.trim() !== '') {
+      return this.clientesRepository.find({
+        where: {
+          nome: Like(`%${nome.trim()}%`),
+        },
+      });
+    }
+
     return this.clientesRepository.find();
   }
 
@@ -47,7 +55,7 @@ export class ClientesService {
   ): Promise<{ mensagem: string; cliente: ClienteEntity }> {
     const cliente = await this.buscarPorId(id);
 
-    await this.clientesRepository.delete(cliente);
+    await this.clientesRepository.delete(cliente.id);
     return {
       mensagem: 'O cliente foi deletado com sucesso!',
       cliente: cliente,

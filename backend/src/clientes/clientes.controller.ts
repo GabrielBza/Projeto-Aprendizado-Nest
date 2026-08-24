@@ -7,19 +7,26 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
 import { ClienteEntity } from './cliente.entity';
 import { CriarClienteDto } from './dtos/criar-cliente-dto';
 import { AtualizarClienteDto } from './dtos/atualizar-cliente-dto';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('clientes')
 export class ClientesController {
   constructor(private readonly clientesService: ClientesService) {}
 
+  @ApiQuery({
+    name: 'nome',
+    required: false,
+    type: String,
+  })
   @Get()
-  listarTodos(): Promise<ClienteEntity[]> {
-    return this.clientesService.listarTodos();
+  listar(@Query('nome') nome?: string): Promise<ClienteEntity[]> {
+    return this.clientesService.listar(nome);
   }
 
   @Get(':id')

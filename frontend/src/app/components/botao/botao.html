@@ -1,0 +1,10 @@
+<button
+  class="botao"
+  [class.primario]="tipo === 'primario'"
+  [class.secundario]="tipo === 'secundario'"
+  [class.perigo]="tipo === 'perigo'"
+  [disabled]="desabilitado"
+  (click)="aoClicar()"
+>
+  {{ texto }}
+</button>
