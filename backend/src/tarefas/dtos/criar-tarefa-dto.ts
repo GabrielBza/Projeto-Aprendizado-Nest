@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { StatusTarefa } from '../enums/status-tarefa.enum';
-import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CriarTarefaDto {
   @IsString()
@@ -12,9 +11,4 @@ export class CriarTarefaDto {
   @IsNotEmpty()
   @ApiProperty()
   descricao!: string;
-
-  @IsEnum(StatusTarefa)
-  @IsNotEmpty()
-  @ApiProperty()
-  status!: StatusTarefa;
 }

@@ -4,6 +4,7 @@ import { AtualizarTarefaDto } from './dtos/atualizar-tarefa-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TarefaEntity } from './tarefa.entity';
 import { Repository } from 'typeorm';
+import { StatusTarefa } from './enums/status-tarefa.enum';
 
 @Injectable()
 export class TarefasService {
@@ -27,7 +28,11 @@ export class TarefasService {
   }
 
   async criar(dados: CriarTarefaDto): Promise<TarefaEntity> {
-    const novaTarefa = this.tarefasRepository.create(dados);
+    const novaTarefa = this.tarefasRepository.create({
+      titulo: dados.titulo,
+      descricao: dados.descricao,
+      status: StatusTarefa.PENDENTE,
+    });
 
     return this.tarefasRepository.save(novaTarefa);
   }
@@ -38,7 +43,25 @@ export class TarefasService {
   ): Promise<TarefaEntity> {
     const tarefa = await this.buscarPorId(id);
 
-    Object.assign(tarefa, dados);
+    if (dados.titulo !== undefined) {
+      tarefa.titulo = dados.titulo;
+    }
+    if (dados.descricao !== undefined) {
+      tarefa.descricao = dados.descricao;
+    }
+
+    return this.tarefasRepository.save(tarefa);
+  }
+
+  async avancarStatus(id: number): Promise<TarefaEntity> {
+    const tarefa = await this.buscarPorId(id);
+
+    if (tarefa.status === StatusTarefa.EM_ANDAMENTO) {
+      tarefa.status = StatusTarefa.CONCLUIDA;
+    }
+    if (tarefa.status === StatusTarefa.PENDENTE) {
+      tarefa.status = StatusTarefa.EM_ANDAMENTO;
+    }
 
     return this.tarefasRepository.save(tarefa);
   }

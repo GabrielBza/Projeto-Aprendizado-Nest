@@ -1,1 +1,147 @@
-<p>tarefas works!</p>
+<div class="pagina">
+  <div class="topo">
+    <div class="cabecalho">
+      <h1 class="titulo-pagina">Tarefas</h1>
+      <p class="subtitulo">Gerencie e acompanhe as tarefas do sistema</p>
+    </div>
+
+    <div class="acoes-topo">
+      <div class="contador">
+        <h2 class="quantidade">Quantidade</h2>
+        <p class="valor">{{ tarefas().length }}</p>
+      </div>
+
+      <app-botao texto="Nova Tarefa" tipo="primario" (clicado)="abrirCriacao(true)"></app-botao>
+    </div>
+  </div>
+
+  <div class="corpo">
+    <div class="quadro">
+      @for (coluna of colunas; track coluna.status) {
+        <div class="coluna">
+          <h2>{{ coluna.titulo }}</h2>
+
+          <div class="lista-cards">
+            @for (card of cardsDaColuna(coluna.status); track card.id) {
+              <app-card class="card" (click)="abrirDetalhes(card)">
+                <h3 class="card-titulo">{{ card.titulo }}</h3>
+
+                <p class="card-descricao">{{ card.descricao }}</p>
+
+                <app-tag [texto]="textoTag(card.status)" [tipo]="tipoTag(card.status)"></app-tag>
+              </app-card>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+@if (modalDetalhesAberto && tarefaSelecionada) {
+  <app-modal class="modal-detalhes" titulo="Detalhes da Tarefa" (fechar)="fecharDetalhes()">
+    <div class="detalhes-tarefa">
+      <app-tag
+        class="tag-detalhes"
+        [texto]="textoTag(tarefaSelecionada.status)"
+        [tipo]="tipoTag(tarefaSelecionada.status)"
+      ></app-tag>
+
+      <h2 class="titulo-detalhes">{{ tarefaSelecionada.titulo }}</h2>
+      <p class="descricao-detalhes">{{ tarefaSelecionada.descricao }}</p>
+
+      <div class="acoes-tarefa">
+        <div class="botao-promocao">
+          @if (tarefaSelecionada.status !== 'CONCLUIDA') {
+            <app-botao
+              texto="Avançar Etapa"
+              tipo="primario"
+              (clicado)="abrirPopupAvanco(true)"
+            ></app-botao>
+          }
+        </div>
+        <div class="botoes-crud">
+          <app-botao texto="Editar" tipo="secundario" (clicado)="abrirEdicao()"></app-botao>
+          <app-botao texto="Excluir" tipo="perigo" (clicado)="abrirDelecao()"></app-botao>
+        </div>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (modalCriacaoAberto) {
+  <app-modal titulo="Nova Tarefa" (fechar)="abrirCriacao(false)">
+    <div class="formulario">
+      <div class="campos">
+        <app-input
+          label="Título"
+          placeholder="Digite o título da tarefa"
+          (trocaValor)="tituloTarefaModal = $event"
+        ></app-input>
+
+        <app-input
+          label="Descrição"
+          placeholder="Digite a descrição da tarefa"
+          (trocaValor)="descricaoTarefaModal = $event"
+        ></app-input>
+      </div>
+
+      @if (erro) {
+        <p class="erro-formulario">{{ erro }}</p>
+      }
+
+      <div class="acoes-form">
+        <app-botao texto="Cancelar" tipo="secundario" (clicado)="abrirCriacao(false)"></app-botao>
+        <app-botao texto="Salvar" tipo="primario" (clicado)="criarTarefa()"></app-botao>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (modalEdicaoAberto) {
+  <app-modal
+    titulo="Editar Tarefa"
+    (fechar)="modalEdicaoAberto = false; modalDetalhesAberto = true"
+  >
+    <div class="formulario">
+      <div class="campos">
+        <app-input
+          label="Título"
+          [valor]="tituloTarefaModal"
+          (trocaValor)="tituloTarefaModal = $event"
+        ></app-input>
+        <app-input
+          label="Descrição"
+          [valor]="descricaoTarefaModal"
+          (trocaValor)="descricaoTarefaModal = $event"
+        ></app-input>
+      </div>
+      <div class="acoes-form">
+        <app-botao
+          texto="Cancelar"
+          tipo="secundario"
+          (clicado)="modalEdicaoAberto = false; modalDetalhesAberto = true"
+        ></app-botao>
+        <app-botao texto="Salvar" tipo="primario" (clicado)="editarTarefa()"></app-botao>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (popupAvancoAberto) {
+  <app-popup-dialog
+    titulo="Avançar etapa"
+    mensagem="Ao avançar esta tarefa, não será possível retornar ao status anterior. Deseja continuar?"
+    textoConfirmar="Avançar"
+    tipoConfirmar="primario"
+    (confirmar)="avancarStatus(); popupAvancoAberto = false"
+    (cancelar)="abrirPopupAvanco(false)"
+  ></app-popup-dialog>
+}
+
+@if (popupDelecaoAberto) {
+  <app-popup-dialog
+    (confirmar)="deletarTarefa()"
+    (cancelar)="popupDelecaoAberto = false; modalDetalhesAberto = true"
+  ></app-popup-dialog>
+}

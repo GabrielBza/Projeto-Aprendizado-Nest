@@ -40,6 +40,11 @@ export class TarefasController {
     return this.tarefasService.atualizar(id, dados);
   }
 
+  @Patch(':id/avancar')
+  avancarStatus(@Param('id', ParseIntPipe) id: number): Promise<TarefaEntity> {
+    return this.tarefasService.avancarStatus(id);
+  }
+
   @Delete(':id')
   deletar(@Param('id', ParseIntPipe) id: number) {
     return this.tarefasService.deletar(id);

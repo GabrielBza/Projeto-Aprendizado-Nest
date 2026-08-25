@@ -1,13 +1,17 @@
 <div class="overlay">
   <div class="popup">
-    <h2>Confirmar exclusão</h2>
+    <h2>{{ titulo }}</h2>
 
-    <p>Deseja realmente excluir este item?</p>
+    <p>{{ mensagem }}</p>
 
     <div class="acoes">
       <app-botao texto="Cancelar" tipo="secundario" (clicado)="aoCancelar()"></app-botao>
 
-      <app-botao texto="Excluir" tipo="perigo" (clicado)="aoConfirmar()"></app-botao>
+      <app-botao
+        [texto]="textoConfirmar"
+        [tipo]="tipoConfirmar"
+        (clicado)="aoConfirmar()"
+      ></app-botao>
     </div>
   </div>
 </div>

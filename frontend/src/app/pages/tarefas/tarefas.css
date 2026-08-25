@@ -1,0 +1,202 @@
+.pagina {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px;
+
+  height: 100%;
+  width: 100%;
+
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  min-height: 0;
+  overflow: hidden;
+}
+
+.topo {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitulo {
+  margin-top: 0;
+}
+
+.acoes-topo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.contador {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quantidade {
+  margin-bottom: 4px;
+}
+
+.valor {
+  margin-top: 0;
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+}
+
+.corpo {
+  background-color: #d4c27c;
+  border-radius: 10px;
+
+  flex: 1;
+  min-height: 0;
+
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.quadro {
+  flex: 1;
+  min-height: 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.coluna {
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.coluna:not(:last-child) {
+  border-right: 2px solid rgba(0, 28, 26, 0.25);
+}
+
+.coluna h2 {
+  margin: 0;
+  color: rgb(0, 0, 0);
+}
+
+.lista-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  overflow-y: auto;
+  align-items: center;
+}
+
+.card {
+  box-sizing: border-box;
+  padding: 4px;
+
+  width: 90%;
+  height: 75%;
+}
+
+.card:hover {
+  cursor: pointer;
+}
+
+.card-titulo {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  font-size: large;
+}
+
+.card-descricao {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: small;
+}
+
+.card-status {
+  font-size: medium;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.pendente {
+  background-color: red;
+  color: black;
+}
+
+.em-andamento {
+  background-color: blue;
+  color: black;
+}
+
+.concluida {
+  background-color: darkgreen;
+  color: black;
+}
+
+.detalhes-tarefa {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.titulo-detalhes {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.descricao-detalhes {
+  margin-top: 3px;
+  margin-bottom: 42px;
+}
+
+.acoes-tarefa {
+  display: flex;
+  justify-content: space-between;
+}
+
+.botoes-crud {
+  display: flex;
+  gap: 8px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.erro-formulario {
+  color: red;
+  margin: 0px;
+}
+
+.acoes-form {
+  display: flex;
+  justify-content: space-between;
+}
