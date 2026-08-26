@@ -4,6 +4,7 @@ import { ClientesController } from './clientes.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClienteEntity } from './cliente.entity';
 
+// Camada que vai interligar os diferentes arquivos da 'entidade' "Cliente".
 @Module({
   imports: [TypeOrmModule.forFeature([ClienteEntity])],
   providers: [ClientesService],

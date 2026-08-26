@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+//Configuração do TypeORM e conexão com o Banco de Dados.
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

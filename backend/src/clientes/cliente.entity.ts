@@ -3,9 +3,11 @@ import { StatusCliente } from './enums/status-cliente.enum';
 import { TipoCliente } from './enums/tipo-cliente.enum';
 import { PedidoEntity } from '../pedidos/pedido.entity';
 
+// Modelo de entidade de cliente. A tabela de clientes do banco de dados é criada a partir desses atributos aqui definidos
+// Se relaciona com a tabela de pedidos de forma 1-N (sinalizado na anotação @OneToMany()
 @Entity('clientes')
 export class ClienteEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn() // ID gerado automaticamente pelo Banco
   id!: number;
 
   @Column()
