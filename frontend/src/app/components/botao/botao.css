@@ -54,3 +54,8 @@
   background-color: var(--color-perigo);
   color: white;
 }
+
+.cinza {
+  background-color: var(--color-azul-po);
+  color: black;
+}

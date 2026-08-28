@@ -9,11 +9,10 @@ import {
   Post,
 } from '@nestjs/common';
 import { PedidosService } from './pedidos.service';
-import { PedidoEntity } from './pedido.entity';
 import { AtualizarPedidoDto } from './dtos/atualizar-pedido.dto';
 import { CriarPedidoDto } from './dtos/criar-pedido.dto';
 import { PedidoResumidoDto } from './dtos/pedido-resumido.dto';
-
+import { PedidoDetalhadoDto } from './dtos/pedido-detalhado';
 @Controller('pedidos')
 export class PedidosController {
   constructor(private readonly pedidosService: PedidosService) {}
@@ -38,12 +37,14 @@ export class PedidosController {
   }
 
   @Get(':id')
-  buscarPorId(@Param('id', ParseIntPipe) id: number): Promise<PedidoEntity> {
+  buscarPorId(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<PedidoDetalhadoDto> {
     return this.pedidosService.buscarPorId(id);
   }
 
   @Post()
-  criar(@Body() dados: CriarPedidoDto): Promise<PedidoEntity> {
+  criar(@Body() dados: CriarPedidoDto): Promise<PedidoResumidoDto> {
     return this.pedidosService.criar(dados);
   }
 
@@ -51,14 +52,14 @@ export class PedidosController {
   atualizar(
     @Param('id', ParseIntPipe) id: number,
     @Body() dados: AtualizarPedidoDto,
-  ): Promise<PedidoEntity> {
+  ): Promise<PedidoResumidoDto> {
     return this.pedidosService.atualizar(id, dados);
   }
 
   @Delete(':id')
   deletar(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<{ mensagem: string; pedido: PedidoEntity }> {
+  ): Promise<{ mensagem: string; pedido: PedidoResumidoDto }> {
     return this.pedidosService.deletar(id);
   }
 }

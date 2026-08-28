@@ -17,12 +17,15 @@
 }
 
 .modal {
-  width: 500px;
+  width: var(--modal-width, 500px);
+  max-width: 92vw;
+  min-width: 0;
+
+  box-sizing: border-box;
+  flex-shrink: 0;
 
   background-color: var(--color-marfim);
-
   border-radius: 12px;
-
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
 
   overflow: hidden;

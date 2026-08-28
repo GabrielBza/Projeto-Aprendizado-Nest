@@ -5,8 +5,8 @@
 
   border-radius: 20px;
 
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 500;
 
   white-space: nowrap;
 }
@@ -27,13 +27,13 @@
 }
 
 .eletronico {
-  background-color: var(--color-azul-po);
-  color: var(--color-petroleo);
+  background-color: #aab9c2;
+  color: black;
 }
 
 .alimento {
-  background-color: var(--color-salvia);
-  color: var(--color-petroleo);
+  background-color: #c89b3c;
+  color: black;
 }
 
 .roupa {
@@ -42,28 +42,33 @@
 }
 
 .brinquedo {
-  background-color: var(--color-marfim);
+  background-color: rgb(0, 214, 86);
   color: var(--color-petroleo);
 }
 
 .higiene {
-  background-color: var(--color-neblina);
+  background-color: #b4e6cf;
+  color: black;
+}
+
+.em_analise {
+  background-color: rgb(194, 144, 86);
   color: var(--color-petroleo);
 }
 
 .entregue {
-  background-color: var(--color-salvia);
-  color: var(--color-petroleo);
+  background-color: rgb(6, 148, 98);
+  color: black;
 }
 
 .a_caminho {
-  background-color: var(--color-azul-po);
+  background-color: rgb(2, 48, 185);
   color: var(--color-petroleo);
 }
 
 .atrasado {
-  background-color: var(--color-champagne);
-  color: var(--color-petroleo);
+  background-color: rgb(223, 85, 6);
+  color: black;
 }
 
 .cancelado {
@@ -72,12 +77,12 @@
 }
 
 .confirmado {
-  background-color: var(--color-petroleo);
-  color: var(--color-marfim);
+  background-color: rgb(133, 34, 220);
+  color: black;
 }
 
 .ativo {
-  background-color: var(--color-salvia);
+  background-color: rgb(162, 162, 162);
   color: var(--color-petroleo);
 }
 
@@ -87,16 +92,26 @@
 }
 
 .padrao {
-  background-color: var(--color-neblina);
-  color: var(--color-texto-suave);
+  background-color: rgb(126, 76, 0);
+  color: white;
 }
 
 .premium {
-  background-color: var(--color-champagne);
+  background-color: rgb(255, 174, 0);
   color: var(--color-petroleo);
 }
 
 .empresarial {
   background-color: var(--color-petroleo);
   color: var(--color-marfim);
+}
+
+.disponivel {
+  background-color: rgb(2, 98, 65);
+  color: white;
+}
+
+.indisponivel {
+  background-color: rgb(124, 4, 4);
+  color: white;
 }

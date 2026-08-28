@@ -1,0 +1,245 @@
+<div class="pagina">
+  <div class="topo">
+    <div class="cabecalho">
+      <h1>Pedidos</h1>
+      <p>Gerencie e visualize os pedidos do sistema</p>
+    </div>
+
+    <div class="contador">
+      <h2>Quantidade</h2>
+      <p>{{ pedidos().length }}</p>
+    </div>
+  </div>
+
+  <div class="interacoes">
+    <app-botao texto="Novo Pedido" tipo="primario" (clicado)="abrirCriacao()"></app-botao>
+  </div>
+
+  <div class="corpo">
+    <app-tabela
+      [colunas]="colunas"
+      [dados]="pedidos()"
+      [mostrarVisualizar]="true"
+      (visualizar)="abrirDetalhes($event)"
+    ></app-tabela>
+  </div>
+</div>
+
+@if (modalCriacaoAberto()) {
+  <app-modal titulo="Novo Pedido" (fechar)="fecharCriacao()">
+    <div class="formulario">
+      <app-select
+        label="Cliente"
+        [valor]="clienteIdModal?.toString() ?? ''"
+        (trocaValor)="clienteIdModal = +$event"
+      >
+        <option value="">Selecione um cliente</option>
+
+        @for (cliente of clientes(); track cliente.id) {
+          <option [value]="cliente.id">
+            {{ cliente.nome }}
+          </option>
+        }
+      </app-select>
+
+      <app-select
+        label="Produto"
+        [valor]="produtoIdModal?.toString() ?? ''"
+        (trocaValor)="produtoIdModal = +$event"
+      >
+        <option value="">Selecione um produto</option>
+
+        @for (produto of produtos(); track produto.id) {
+          <option [value]="produto.id">
+            {{ produto.nome }}
+          </option>
+        }
+      </app-select>
+
+      <app-input
+        label="Quantidade"
+        tipo="number"
+        [valor]="quantidadeModal ?? ''"
+        (trocaValor)="quantidadeModal = +$event"
+      ></app-input>
+    </div>
+
+    <div modal-actions-right>
+      <app-botao texto="Cancelar" tipo="secundario" (clicado)="fecharCriacao()"></app-botao>
+
+      <app-botao texto="Criar" tipo="primario" (clicado)="criarPedido()"></app-botao>
+    </div>
+  </app-modal>
+}
+
+@if (modalDetalhesAberto() && pedidoSelecionado(); as pedido) {
+  <app-modal class="modal-detalhamento" titulo="Detalhes do Pedido" (fechar)="fecharDetalhes()">
+    <div class="detalhes-pedido">
+      <div class="resumo-pedido">
+        <div class="identificacao-pedido">
+          <h2>Pedido #{{ pedido.id }}</h2>
+          <p>Quantidade: {{ pedido.quantidade }}</p>
+
+          <div class="status-pedido">
+            <app-tag
+              [texto]="textoTagStatusPedido(pedido.status)"
+              [tipo]="tipoTagStatusPedido(pedido.status)"
+            ></app-tag>
+          </div>
+        </div>
+
+        <div class="acoes-pedido">
+          <app-botao texto="Editar" tipo="cinza" (clicado)="abrirEdicao()"></app-botao>
+
+          <app-botao texto="Excluir" tipo="perigo" (clicado)="alterarExclusao(true)"></app-botao>
+        </div>
+      </div>
+
+      <div class="informacoes-relacionadas">
+        <div class="bloco-detalhes">
+          <h3>Cliente #{{ pedido.cliente.id }}</h3>
+
+          <div class="linha-detalhe">
+            <span class="rotulo">Nome</span>
+            <span class="informacao">
+              {{ pedido.cliente.nome }}
+            </span>
+          </div>
+
+          <div class="linha-detalhe">
+            <span class="rotulo">Email</span>
+            <span class="informacao">
+              {{ pedido.cliente.email }}
+            </span>
+          </div>
+
+          <div class="linha-detalhe">
+            <span class="rotulo">Idade</span>
+            <span class="informacao">
+              {{ pedido.cliente.idade }}
+            </span>
+          </div>
+
+          <div class="linha-dupla">
+            <div class="linha-detalhe">
+              <span class="rotulo">Tipo</span>
+              <app-tag
+                [tipo]="tipoTagTipoCliente(pedido.cliente.tipo)"
+                [texto]="textoTagTipoCliente(pedido.cliente.tipo)"
+              ></app-tag>
+            </div>
+
+            <div class="linha-detalhe">
+              <span class="rotulo">Status</span>
+              <app-tag
+                [tipo]="tipoTagStatusCliente(pedido.cliente.status)"
+                [texto]="textoTagStatusCliente(pedido.cliente.status)"
+              ></app-tag>
+            </div>
+          </div>
+        </div>
+
+        <div class="bloco-detalhes">
+          <h3>Produto #{{ pedido.produto.id }}</h3>
+
+          <div class="linha-detalhe">
+            <span class="rotulo">Nome</span>
+            <span class="informacao">
+              {{ pedido.produto.nome }}
+            </span>
+          </div>
+
+          <div class="linha-detalhe">
+            <span class="rotulo">Descrição</span>
+            <span class="informacao">
+              {{ pedido.produto.descricao }}
+            </span>
+          </div>
+
+          <div class="linha-detalhe">
+            <span class="rotulo">Preço</span>
+            <span class="informacao"> R$ {{ pedido.produto.preco }} </span>
+          </div>
+
+          <div class="linha-dupla">
+            <div class="linha-detalhe">
+              <span class="rotulo">Categoria</span>
+              <app-tag
+                [tipo]="tipoTagCategoriaProduto(pedido.produto.categoria)"
+                [texto]="textoTagCategoriaProduto(pedido.produto.categoria)"
+              ></app-tag>
+            </div>
+
+            <div class="linha-detalhe">
+              <span class="rotulo">Disponível</span>
+              <app-tag
+                [tipo]="tipoTagDisponibilidadeProduto(pedido.produto.disponivel)"
+                [texto]="textoTagDisponibilidadeProduto(pedido.produto.disponivel)"
+              ></app-tag>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-modal>
+}
+
+@if (modalEdicaoAberto()) {
+  <app-modal titulo="Editar Pedido" (fechar)="fecharEdicao()">
+    <div class="formulario">
+      <app-select
+        label="Produto"
+        [valor]="produtoIdModal?.toString() ?? ''"
+        (trocaValor)="produtoIdModal = +$event"
+      >
+        @for (produto of produtos(); track produto.id) {
+          <option [value]="produto.id">
+            {{ produto.nome }}
+          </option>
+        }
+      </app-select>
+
+      <app-input
+        label="Quantidade"
+        tipo="number"
+        [valor]="quantidadeModal ?? ''"
+        (trocaValor)="quantidadeModal = +$event"
+      ></app-input>
+
+      <app-select
+        label="Cliente"
+        [valor]="clienteIdModal?.toString() ?? ''"
+        (trocaValor)="clienteIdModal = +$event"
+      >
+        @for (cliente of clientes(); track cliente.id) {
+          <option [value]="cliente.id">
+            {{ cliente.nome }}
+          </option>
+        }
+      </app-select>
+
+      <app-select label="Status" [valor]="statusModal" (trocaValor)="alterarStatusEdicao($event)">
+        <option [value]="StatusPedido.EM_ANALISE">Em análise</option>
+        <option [value]="StatusPedido.CONFIRMADO">Confirmado</option>
+        <option [value]="StatusPedido.A_CAMINHO">A caminho</option>
+        <option [value]="StatusPedido.ENTREGUE">Entregue</option>
+        <option [value]="StatusPedido.ATRASADO">Atrasado</option>
+        <option [value]="StatusPedido.CANCELADO">Cancelado</option>
+      </app-select>
+    </div>
+
+    <div class="botoes-formulario">
+      <app-botao texto="Cancelar" tipo="secundario" (clicado)="fecharEdicao()"></app-botao>
+
+      <app-botao texto="Salvar" tipo="primario" (clicado)="salvarEdicao()"></app-botao>
+    </div>
+  </app-modal>
+}
+
+@if (popupExclusaoAberto()) {
+  <app-popup-dialog
+    titulo="Excluir"
+    (confirmar)="excluirPedido()"
+    (cancelar)="alterarExclusao(false)"
+  ></app-popup-dialog>
+}

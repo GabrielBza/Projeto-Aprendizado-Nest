@@ -15,7 +15,6 @@
         texto="Novo Produto"
         tipo="primario"
         (clicado)="alterarModal('criacao', true)"
-        (editar)="alterarModal('edicao', true)"
       ></app-botao>
       <app-input
         placeholder="Digite o nome do produto..."
@@ -50,13 +49,13 @@
         placeholder="Digite o preço do produto"
         (trocaValor)="modalPrecoProduto = $event"
       ></app-input>
-      <app-select label="Categoria" (trocaValor)="modalCategoriaProduto = $event">
+      <app-select label="Categoria" (trocaValor)="alterarCategoriaProduto($event)">
         <option value="" disabled selected>Selecione a categoria</option>
-        <option value="ELETRONICO">Eletrônico</option>
-        <option value="ALIMENTO">Alimento</option>
-        <option value="ROUPA">Roupa</option>
-        <option value="BRINQUEDO">Brinquedo</option>
-        <option value="HIGIENE">Higiene</option>
+        <option [value]="CategoriaProduto.ELETRONICO">Eletrônico</option>
+        <option [value]="CategoriaProduto.ALIMENTO">Alimento</option>
+        <option [value]="CategoriaProduto.ROUPA">Roupa</option>
+        <option [value]="CategoriaProduto.BRINQUEDO">Brinquedo</option>
+        <option [value]="CategoriaProduto.HIGIENE">Higiene</option>
       </app-select>
       <div class="checkboxDisponibilidade">
         <label for="disponivel"> Disponível </label>
@@ -64,7 +63,7 @@
           type="checkbox"
           id="disponivel"
           [checked]="modalDisponivelProduto"
-          (change)="alterarDispoibilidade($event)"
+          (change)="alterarDisponibilidade($event)"
         />
       </div>
 
@@ -85,31 +84,38 @@
 }
 
 @if (modalEdicaoAberto) {
-  <app-modal titulo="" (fechar)="alterarModal('edicao', false)">
+  <app-modal titulo="Editar Produto" (fechar)="alterarModal('edicao', false)">
     <div class="formulario">
       <div class="campos">
         <app-input
           label="Nome"
+          [valor]="modalNomeProduto"
           placeholder="Digite o nome do produto"
           (trocaValor)="modalNomeProduto = $event"
         ></app-input>
         <app-input
           label="Descrição"
+          [valor]="modalDescricaoProduto"
           placeholder="Digite a descricao do produto"
           (trocaValor)="modalDescricaoProduto = $event"
         ></app-input>
         <app-input
           label="Preço"
+          [valor]="modalPrecoProduto"
           placeholder="Digite o preço do produto"
           (trocaValor)="modalPrecoProduto = $event"
         ></app-input>
-        <app-select label="Categoria" (trocaValor)="modalCategoriaProduto = $event">
-          <option value="" disabled selected>Selecione a categoria</option>
-          <option value="ELETRONICO">Eletrônico</option>
-          <option value="ALIMENTO">Alimento</option>
-          <option value="ROUPA">Roupa</option>
-          <option value="BRINQUEDO">Brinquedo</option>
-          <option value="HIGIENE">Higiene</option>
+        <app-select
+          label="Categoria"
+          [valor]="modalCategoriaProduto"
+          (trocaValor)="alterarCategoriaProduto($event)"
+        >
+          <option value="" disabled>Selecione a categoria</option>
+          <option [value]="CategoriaProduto.ELETRONICO">Eletrônico</option>
+          <option [value]="CategoriaProduto.ALIMENTO">Alimento</option>
+          <option [value]="CategoriaProduto.ROUPA">Roupa</option>
+          <option [value]="CategoriaProduto.BRINQUEDO">Brinquedo</option>
+          <option [value]="CategoriaProduto.HIGIENE">Higiene</option>
         </app-select>
 
         <div class="checkboxDisponibilidade">
@@ -118,7 +124,7 @@
             type="checkbox"
             id="disponivel"
             [checked]="modalDisponivelProduto"
-            (change)="alterarDispoibilidade($event)"
+            (change)="alterarDisponibilidade($event)"
           />
         </div>
       </div>

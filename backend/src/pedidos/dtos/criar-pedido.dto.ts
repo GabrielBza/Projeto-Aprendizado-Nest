@@ -1,5 +1,4 @@
-import { IsEnum, IsInt, IsNotEmpty, Min } from 'class-validator';
-import { StatusPedido } from '../enums/status-pedido.enum';
+import { IsInt, IsNotEmpty, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CriarPedidoDto {
@@ -18,8 +17,4 @@ export class CriarPedidoDto {
   @IsNotEmpty()
   @ApiProperty()
   clienteId!: number;
-
-  @IsEnum(StatusPedido)
-  @ApiProperty()
-  status!: StatusPedido;
 }

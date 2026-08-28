@@ -8,19 +8,19 @@ export class PedidoEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => ProdutoEntity)
+  @ManyToOne(() => ProdutoEntity, (produto) => produto.pedidos)
   produto!: ProdutoEntity;
 
   @Column()
   quantidade!: number;
 
-  @ManyToOne(() => ClienteEntity)
+  @ManyToOne(() => ClienteEntity, (cliente) => cliente.pedidos)
   cliente!: ClienteEntity;
 
   @Column({
     type: 'enum',
     enum: StatusPedido,
-    default: StatusPedido.CONFIRMADO,
+    default: StatusPedido.EM_ANALISE,
   })
   status!: StatusPedido;
 }

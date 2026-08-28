@@ -1,15 +1,15 @@
-.botao-editar {
+.botao-visualizar {
   padding: 6px 10px;
 
   border: none;
   border-radius: 6px;
 
-  background-color: var(--color-azul-po);
-  color: var(--color-petroleo);
+  background-color: rgb(56, 55, 55);
+  color: white;
 
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 550;
 
   cursor: pointer;
 
@@ -18,10 +18,10 @@
     opacity 0.2s ease;
 }
 
-.botao-editar:hover {
+.botao-visualizar:hover {
   transform: scale(1.05);
 }
 
-.botao-editar:active {
+.botao-visualizar:active {
   transform: scale(0.98);
 }

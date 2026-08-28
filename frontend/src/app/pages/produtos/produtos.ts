@@ -9,6 +9,14 @@ import { SelectComponent } from '../../components/select/select';
 import { CriarProduto } from '../../models/produto/criar-produto';
 import { AtualizarProduto } from '../../models/produto/atualizar-produto';
 import { PopUpComponent } from '../../components/popup/popup';
+import { CategoriaProduto } from '../../enums/produtos/categoria-produto.enum';
+import { TipoTag } from '../../components/tag/tag';
+import {
+  tipoTagCategoriaProduto,
+  textoTagCategoriaProduto,
+  tipoTagDisponibilidadeProduto,
+  textoTagDisponibilidadeProduto,
+} from '../../utils/tag-formatter';
 
 @Component({
   selector: 'app-produtos',
@@ -30,23 +38,40 @@ export class ProdutosPage implements OnInit {
 
   erro: string = '';
 
+  CategoriaProduto = CategoriaProduto;
+
   modalCriacaoAberto: boolean = false;
   modalEdicaoAberto: boolean = false;
   popupDelecaoAberto: boolean = false;
   produtoSelecionadoId: number | null = null;
 
   colunas: ColunaTabela[] = [
+    { titulo: 'ID', campo: 'id' },
     { titulo: 'Nome', campo: 'nome' },
-    { titulo: 'Descricao', campo: 'descricao' },
+    { titulo: 'Descrição', campo: 'descricao' },
     { titulo: 'Preço', campo: 'preco' },
-    { titulo: 'Categoria', campo: 'categoria' },
-    { titulo: 'Disponível', campo: 'disponivel' },
+
+    {
+      titulo: 'Categoria',
+      campo: 'categoria',
+      mostrarComoTag: true,
+      tipoTag: tipoTagCategoriaProduto,
+      textoTag: textoTagCategoriaProduto,
+    },
+
+    {
+      titulo: 'Disponível',
+      campo: 'disponivel',
+      mostrarComoTag: true,
+      tipoTag: tipoTagDisponibilidadeProduto,
+      textoTag: textoTagDisponibilidadeProduto,
+    },
   ];
 
   modalNomeProduto: string = '';
   modalDescricaoProduto: string = '';
   modalPrecoProduto: string = '';
-  modalCategoriaProduto: string = '';
+  modalCategoriaProduto: CategoriaProduto | '' = '';
   modalDisponivelProduto: boolean = true;
 
   ngOnInit(): void {
@@ -76,7 +101,7 @@ export class ProdutosPage implements OnInit {
     });
   }
 
-  alterarDispoibilidade(event: Event) {
+  alterarDisponibilidade(event: Event) {
     const checkbox = event.target as HTMLInputElement;
 
     this.modalDisponivelProduto = checkbox.checked;
@@ -134,6 +159,10 @@ export class ProdutosPage implements OnInit {
     const precoNumber: number = Number(this.modalPrecoProduto);
 
     if (Number.isNaN(precoNumber)) {
+      return;
+    }
+
+    if (!this.modalCategoriaProduto) {
       return;
     }
 
@@ -227,5 +256,9 @@ export class ProdutosPage implements OnInit {
 
   alterarPopUp(aberto: boolean) {
     this.popupDelecaoAberto = aberto;
+  }
+
+  alterarCategoriaProduto(valor: string) {
+    this.modalCategoriaProduto = valor as CategoriaProduto;
   }
 }

@@ -9,6 +9,15 @@ import { ClienteService } from '../../services/clientes';
 import { Cliente } from '../../models/cliente/cliente';
 import { CriarCliente } from '../../models/cliente/criar-cliente';
 import { AtualizarCliente } from '../../models/cliente/AtualizarCliente';
+import { TipoCliente } from '../../enums/clientes/tipo-cliente.enum';
+import { StatusCliente } from '../../enums/clientes/status-cliente.enum';
+import { TipoTag } from '../../components/tag/tag';
+import {
+  tipoTagStatusCliente,
+  textoTagStatusCliente,
+  tipoTagTipoCliente,
+  textoTagTipoCliente,
+} from '../../utils/tag-formatter';
 
 @Component({
   selector: 'app-clientes',
@@ -26,6 +35,9 @@ import { AtualizarCliente } from '../../models/cliente/AtualizarCliente';
 export class ClientesPage implements OnInit {
   constructor(private clienteService: ClienteService) {}
 
+  TipoCliente = TipoCliente;
+  StatusCliente = StatusCliente;
+
   erroCriacao: string = '';
   modalCriacaoAberto: boolean = false;
   modalEdicaoAberto: boolean = false;
@@ -33,28 +45,36 @@ export class ClientesPage implements OnInit {
   clienteSelecionadoId: number | null = null;
 
   colunas: ColunaTabela[] = [
+    { titulo: 'ID', campo: 'id' },
     { titulo: 'Nome', campo: 'nome' },
     { titulo: 'Email', campo: 'email' },
     { titulo: 'Idade', campo: 'idade' },
-    { titulo: 'Tipo', campo: 'tipo' },
-    { titulo: 'Status', campo: 'status' },
+
+    {
+      titulo: 'Status',
+      campo: 'status',
+      mostrarComoTag: true,
+      tipoTag: tipoTagStatusCliente,
+      textoTag: textoTagStatusCliente,
+    },
+
+    {
+      titulo: 'Tipo',
+      campo: 'tipo',
+      mostrarComoTag: true,
+      tipoTag: tipoTagTipoCliente,
+      textoTag: textoTagTipoCliente,
+    },
   ];
 
   clientes = signal<Cliente[]>([]);
 
-  // Campos da CRIAÇÂO
-  nomeNovoCliente: string = '';
-  emailNovoCliente: string = '';
-  idadeNovoCliente: string = '';
-  tipoNovoCliente: string = '';
-  statusNovoCliente: string = '';
-
-  // Campos da EDIÇÂO
-  nomeClienteEdicao: string = '';
-  emailClienteEdicao: string = '';
-  idadeClienteEdicao: string = '';
-  tipoClienteEdicao: string = '';
-  statusClienteEdicao: string = '';
+  // Campos do modal
+  nomeModalCliente: string = '';
+  emailModalCliente: string = '';
+  idadeModalCliente: string = '';
+  tipoModalCliente: TipoCliente | '' = '';
+  statusModalCliente: StatusCliente | '' = '';
 
   ngOnInit() {
     this.carregarClientes();
@@ -74,30 +94,30 @@ export class ClientesPage implements OnInit {
 
   criarCliente() {
     if (
-      !this.nomeNovoCliente ||
-      !this.emailNovoCliente ||
-      !this.idadeNovoCliente ||
-      !this.tipoNovoCliente ||
-      !this.statusNovoCliente
+      !this.nomeModalCliente ||
+      !this.emailModalCliente ||
+      !this.idadeModalCliente ||
+      !this.tipoModalCliente ||
+      !this.statusModalCliente
     ) {
       this.erroCriacao = 'Preencha todos os campos.';
       return;
     }
-    if (Number.isNaN(Number(this.idadeNovoCliente))) {
+    if (Number.isNaN(Number(this.idadeModalCliente))) {
       this.erroCriacao = 'A idade deve ser um número.';
       return;
     }
     this.erroCriacao = '';
 
-    const novoCliente: CriarCliente = {
-      nome: this.nomeNovoCliente,
-      email: this.emailNovoCliente,
-      idade: Number(this.idadeNovoCliente),
-      tipo: this.tipoNovoCliente,
-      status: this.statusNovoCliente,
+    const ModalCliente: CriarCliente = {
+      nome: this.nomeModalCliente,
+      email: this.emailModalCliente,
+      idade: Number(this.idadeModalCliente),
+      tipo: this.tipoModalCliente,
+      status: this.statusModalCliente,
     };
 
-    this.clienteService.criar(novoCliente).subscribe({
+    this.clienteService.criar(ModalCliente).subscribe({
       next: (clienteCriado) => {
         const clientesAtuais = this.clientes();
 
@@ -112,11 +132,11 @@ export class ClientesPage implements OnInit {
         console.error('Erro ao criar cliente:', erro);
       },
     });
-    this.nomeNovoCliente = '';
-    this.emailNovoCliente = '';
-    this.idadeNovoCliente = '';
-    this.tipoNovoCliente = '';
-    this.statusNovoCliente = '';
+    this.nomeModalCliente = '';
+    this.emailModalCliente = '';
+    this.idadeModalCliente = '';
+    this.tipoModalCliente = '';
+    this.statusModalCliente = '';
   }
 
   deletarCliente() {
@@ -150,18 +170,22 @@ export class ClientesPage implements OnInit {
       return;
     }
 
-    const idadeConvertida = Number(this.idadeClienteEdicao);
+    const idadeConvertida = Number(this.idadeModalCliente);
 
     if (Number.isNaN(idadeConvertida)) {
       return;
     }
 
+    if (!this.tipoModalCliente || !this.statusModalCliente) {
+      return;
+    }
+
     const clienteAtualizado: AtualizarCliente = {
-      nome: this.nomeClienteEdicao,
-      email: this.emailClienteEdicao,
+      nome: this.nomeModalCliente,
+      email: this.emailModalCliente,
       idade: idadeConvertida,
-      tipo: this.tipoClienteEdicao,
-      status: this.statusClienteEdicao,
+      tipo: this.tipoModalCliente,
+      status: this.statusModalCliente,
     };
 
     const id = this.clienteSelecionadoId;
@@ -208,11 +232,11 @@ export class ClientesPage implements OnInit {
     }
     this.clienteSelecionadoId = id;
 
-    this.nomeClienteEdicao = cliente.nome;
-    this.emailClienteEdicao = cliente.email;
-    this.idadeClienteEdicao = String(cliente.idade);
-    this.tipoClienteEdicao = cliente.tipo;
-    this.statusClienteEdicao = cliente.status;
+    this.nomeModalCliente = cliente.nome;
+    this.emailModalCliente = cliente.email;
+    this.idadeModalCliente = String(cliente.idade);
+    this.tipoModalCliente = cliente.tipo;
+    this.statusModalCliente = cliente.status;
 
     this.alterarModal('edicao', true);
   }
@@ -235,5 +259,13 @@ export class ClientesPage implements OnInit {
         console.error('Erro ao buscar clientes:', erro);
       },
     });
+  }
+
+  alterarTipoCliente(valor: string) {
+    this.tipoModalCliente = valor as TipoCliente;
+  }
+
+  alterarStatusCliente(valor: string) {
+    this.statusModalCliente = valor as StatusCliente;
   }
 }

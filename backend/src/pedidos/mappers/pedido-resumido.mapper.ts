@@ -1,11 +1,20 @@
 import { PedidoEntity } from '../pedido.entity';
+import { PedidoResumidoDto } from '../dtos/pedido-resumido.dto';
 
-export function formatarPedidoResumido(pedido: PedidoEntity) {
+export function formatarPedidoResumido(
+  pedido: PedidoEntity,
+): PedidoResumidoDto {
   return {
     id: pedido.id,
-    produtoId: pedido.produto.id,
+    produto: {
+      id: pedido.produto.id,
+      nome: pedido.produto.nome,
+    },
     quantidade: pedido.quantidade,
-    clienteId: pedido.cliente.id,
+    cliente: {
+      id: pedido.cliente.id,
+      nome: pedido.cliente.nome,
+    },
     status: pedido.status,
   };
 }

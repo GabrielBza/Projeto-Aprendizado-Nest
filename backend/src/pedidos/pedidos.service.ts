@@ -8,7 +8,9 @@ import { CriarPedidoDto } from './dtos/criar-pedido.dto';
 import { AtualizarPedidoDto } from './dtos/atualizar-pedido.dto';
 import { formatarPedidoResumido } from './mappers/pedido-resumido.mapper';
 import { PedidoResumidoDto } from './dtos/pedido-resumido.dto';
-
+import { StatusPedido } from './enums/status-pedido.enum';
+import { PedidoDetalhadoDto } from './dtos/pedido-detalhado';
+import { formatarPedidoDetalhado } from './mappers/pedido-detalhado.mapper';
 @Injectable()
 export class PedidosService {
   constructor(
@@ -62,7 +64,13 @@ export class PedidosService {
     return pedidos.map(formatarPedidoResumido);
   }
 
-  async buscarPorId(id: number): Promise<PedidoEntity> {
+  async buscarPorId(id: number): Promise<PedidoDetalhadoDto> {
+    const pedido = await this.buscarEntidadePorId(id);
+
+    return formatarPedidoDetalhado(pedido);
+  }
+
+  private async buscarEntidadePorId(id: number): Promise<PedidoEntity> {
     const pedido = await this.pedidosRepository.findOne({
       where: {
         id: id,
@@ -80,7 +88,7 @@ export class PedidosService {
     return pedido;
   }
 
-  async criar(dados: CriarPedidoDto): Promise<PedidoEntity> {
+  async criar(dados: CriarPedidoDto): Promise<PedidoResumidoDto> {
     const cliente = await this.clientesRepository.findOneBy({
       id: dados.clienteId,
     });
@@ -101,17 +109,19 @@ export class PedidosService {
       produto,
       quantidade: dados.quantidade,
       cliente,
-      status: dados.status,
+      status: StatusPedido.EM_ANALISE,
     });
 
-    return this.pedidosRepository.save(novoPedido);
+    const pedidoSalvo = await this.pedidosRepository.save(novoPedido);
+
+    return formatarPedidoResumido(pedidoSalvo);
   }
 
   async atualizar(
     id: number,
     dados: AtualizarPedidoDto,
-  ): Promise<PedidoEntity> {
-    const pedido = await this.buscarPorId(id);
+  ): Promise<PedidoResumidoDto> {
+    const pedido = await this.buscarEntidadePorId(id);
 
     if (dados.produtoId !== undefined) {
       const produto = await this.produtosRepository.findOneBy({
@@ -145,16 +155,20 @@ export class PedidosService {
       pedido.status = dados.status;
     }
 
-    return this.pedidosRepository.save(pedido);
+    const pedidoAtualizado = await this.pedidosRepository.save(pedido);
+
+    return formatarPedidoResumido(pedidoAtualizado);
   }
 
   async deletar(
     id: number,
-  ): Promise<{ mensagem: string; pedido: PedidoEntity }> {
-    const pedido = await this.buscarPorId(id);
+  ): Promise<{ mensagem: string; pedido: PedidoResumidoDto }> {
+    const pedido = await this.buscarEntidadePorId(id);
+
+    const pedidoResumido = formatarPedidoResumido(pedido);
 
     await this.pedidosRepository.remove(pedido);
 
-    return { mensagem: 'Pedido deletado com sucesso.', pedido: pedido };
+    return { mensagem: 'Pedido deletado com sucesso.', pedido: pedidoResumido };
   }
 }

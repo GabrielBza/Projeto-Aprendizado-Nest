@@ -52,7 +52,7 @@
 
       <div class="acoes-tarefa">
         <div class="botao-promocao">
-          @if (tarefaSelecionada.status !== 'CONCLUIDA') {
+          @if (tarefaSelecionada.status !== StatusTarefa.CONCLUIDA) {
             <app-botao
               texto="Avançar Etapa"
               tipo="primario"

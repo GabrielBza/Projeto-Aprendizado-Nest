@@ -1,0 +1,7 @@
+export enum CategoriaProduto {
+  ELETRONICO = 'ELETRONICO',
+  ALIMENTO = 'ALIMENTO',
+  ROUPA = 'ROUPA',
+  BRINQUEDO = 'BRINQUEDO',
+  HIGIENE = 'HIGIENE',
+}

@@ -39,29 +39,29 @@
         <app-input
           label="Nome"
           placeholder="Digite o nome do cliente"
-          (trocaValor)="nomeNovoCliente = $event"
+          (trocaValor)="nomeModalCliente = $event"
         >
         </app-input>
         <app-input
           label="Email"
           placeholder="Digite o email do cliente"
-          (trocaValor)="emailNovoCliente = $event"
+          (trocaValor)="emailModalCliente = $event"
         ></app-input>
         <app-input
           label="Idade"
           placeholder="Digite a idade do cliente"
-          (trocaValor)="idadeNovoCliente = $event"
+          (trocaValor)="idadeModalCliente = $event"
         ></app-input>
-        <app-select label="Tipo" (trocaValor)="tipoNovoCliente = $event">
+        <app-select label="Tipo" (trocaValor)="alterarTipoCliente($event)">
           <option value="" disabled selected>Selecione o tipo</option>
-          <option value="PADRAO">Padrão</option>
-          <option value="PREMIUM">Premium</option>
-          <option value="EMPRESARIAL">Empresarial</option>
+          <option [value]="TipoCliente.PADRAO">Padrão</option>
+          <option [value]="TipoCliente.PREMIUM">Premium</option>
+          <option [value]="TipoCliente.EMPRESARIAL">Empresarial</option>
         </app-select>
-        <app-select label="Status" (trocaValor)="statusNovoCliente = $event">
+        <app-select label="Status" (trocaValor)="alterarStatusCliente($event)">
           <option value="" disabled selected>Selecione o status</option>
-          <option value="ATIVO">Ativo</option>
-          <option value="INATIVO">Inativo</option>
+          <option [value]="StatusCliente.ATIVO">Ativo</option>
+          <option [value]="StatusCliente.INATIVO">Inativo</option>
         </app-select>
       </div>
 
@@ -89,41 +89,41 @@
       <div class="campos">
         <app-input
           label="Nome"
-          [valor]="nomeClienteEdicao"
+          [valor]="nomeModalCliente"
           placeholder="Digite o nome do cliente"
-          (trocaValor)="nomeClienteEdicao = $event"
+          (trocaValor)="nomeModalCliente = $event"
         >
         </app-input>
         <app-input
           label="Email"
-          [valor]="emailClienteEdicao"
+          [valor]="emailModalCliente"
           placeholder="Digite o email do cliente"
-          (trocaValor)="emailClienteEdicao = $event"
+          (trocaValor)="emailModalCliente = $event"
         ></app-input>
         <app-input
           label="Idade"
-          [valor]="idadeClienteEdicao"
+          [valor]="idadeModalCliente"
           placeholder="Digite a idade do cliente"
-          (trocaValor)="idadeClienteEdicao = $event"
+          (trocaValor)="idadeModalCliente = $event"
         ></app-input>
         <app-select
           label="Tipo"
-          [valor]="tipoClienteEdicao"
-          (trocaValor)="tipoClienteEdicao = $event"
+          [valor]="tipoModalCliente"
+          (trocaValor)="alterarTipoCliente($event)"
         >
-          <option value="" disabled selected>Selecione o tipo</option>
-          <option value="PADRAO">Padrão</option>
-          <option value="PREMIUM">Premium</option>
-          <option value="EMPRESARIAL">Empresarial</option>
+          <option value="" disabled>Selecione o tipo</option>
+          <option [value]="TipoCliente.PADRAO">Padrão</option>
+          <option [value]="TipoCliente.PREMIUM">Premium</option>
+          <option [value]="TipoCliente.EMPRESARIAL">Empresarial</option>
         </app-select>
         <app-select
           label="Status"
-          [valor]="statusClienteEdicao"
-          (trocaValor)="statusClienteEdicao = $event"
+          [valor]="statusModalCliente"
+          (trocaValor)="alterarStatusCliente($event)"
         >
-          <option value="" disabled selected>Selecione o status</option>
-          <option value="ATIVO">Ativo</option>
-          <option value="INATIVO">Inativo</option>
+          <option value="" disabled>Selecione o status</option>
+          <option [value]="StatusCliente.ATIVO">Ativo</option>
+          <option [value]="StatusCliente.INATIVO">Inativo</option>
         </app-select>
       </div>
 

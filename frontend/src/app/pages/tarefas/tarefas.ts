@@ -10,6 +10,7 @@ import { PopUpComponent } from '../../components/popup/popup';
 import { InputComponent } from '../../components/input/input';
 import { AtualizarTarefa } from '../../models/tarefas/atualizar-tarefa';
 import { CriarTarefa } from '../../models/tarefas/criar-tarefa';
+import { StatusTarefa } from '../../enums/tarefas/status-tarefa.enum';
 
 @Component({
   selector: 'app-tarefas',
@@ -31,6 +32,8 @@ export class TarefasPage implements OnInit {
 
   erro: string = '';
 
+  StatusTarefa = StatusTarefa;
+
   modalCriacaoAberto: boolean = false;
   modalDetalhesAberto: boolean = false;
   modalEdicaoAberto: boolean = false;
@@ -39,21 +42,20 @@ export class TarefasPage implements OnInit {
 
   tituloTarefaModal: string = '';
   descricaoTarefaModal: string = '';
-  statusTarefaModal: string = '';
   tarefaSelecionada: Tarefa | null = null;
 
   colunas = [
     {
       titulo: 'Pendentes',
-      status: 'PENDENTE',
+      status: StatusTarefa.PENDENTE,
     },
     {
       titulo: 'Em andamento',
-      status: 'EM_ANDAMENTO',
+      status: StatusTarefa.EM_ANDAMENTO,
     },
     {
       titulo: 'Concluídas',
-      status: 'CONCLUIDA',
+      status: StatusTarefa.CONCLUIDA,
     },
   ];
 
@@ -73,7 +75,7 @@ export class TarefasPage implements OnInit {
     });
   }
 
-  cardsDaColuna(status: string) {
+  cardsDaColuna(status: StatusTarefa) {
     return this.tarefas().filter((tarefa) => tarefa.status === status);
   }
 
@@ -245,11 +247,11 @@ export class TarefasPage implements OnInit {
   }
 
   tipoTag(status: string) {
-    if (status === 'PENDENTE') {
+    if (status === StatusTarefa.PENDENTE) {
       return 'pendente';
     }
 
-    if (status === 'EM_ANDAMENTO') {
+    if (status === StatusTarefa.EM_ANDAMENTO) {
       return 'em_andamento';
     }
 
@@ -257,11 +259,11 @@ export class TarefasPage implements OnInit {
   }
 
   textoTag(status: string) {
-    if (status === 'PENDENTE') {
+    if (status === StatusTarefa.PENDENTE) {
       return 'Pendente';
     }
 
-    if (status === 'EM_ANDAMENTO') {
+    if (status === StatusTarefa.EM_ANDAMENTO) {
       return 'Em andamento';
     }
 

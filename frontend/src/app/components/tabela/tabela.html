@@ -5,8 +5,7 @@
         @for (coluna of colunas; track coluna.campo) {
           <th>{{ coluna.titulo }}</th>
         }
-
-        @if (mostrarBotoes) {
+        @if (mostrarBotoes || mostrarVisualizar) {
           <th></th>
         }
       </tr>
@@ -16,14 +15,30 @@
       @for (linha of dados; track linha.id) {
         <tr>
           @for (coluna of colunas; track coluna.campo) {
-            <td>{{ valorCelula(linha, coluna.campo) }}</td>
+            <td>
+              @if (coluna.mostrarComoTag) {
+                <app-tag
+                  [tipo]="tipoDaTag(linha, coluna)"
+                  [texto]="textoDaTag(linha, coluna)"
+                ></app-tag>
+              } @else {
+                {{ valorCelula(linha, coluna.campo) }}
+              }
+            </td>
           }
 
-          @if (mostrarBotoes) {
+          @if (mostrarBotoes || mostrarVisualizar) {
             <td>
               <div class="botoes">
-                <app-botao-editar (clicado)="aoEditar(linha.id)"></app-botao-editar>
-                <app-botao-deletar (clicado)="aoDeletar(linha.id)"></app-botao-deletar>
+                @if (mostrarVisualizar) {
+                  <app-botao-visualizar (clicado)="aoVisualizar(linha.id)"></app-botao-visualizar>
+                }
+
+                @if (mostrarBotoes) {
+                  <app-botao-editar (clicado)="aoEditar(linha.id)"></app-botao-editar>
+
+                  <app-botao-deletar (clicado)="aoDeletar(linha.id)"></app-botao-deletar>
+                }
               </div>
             </td>
           }

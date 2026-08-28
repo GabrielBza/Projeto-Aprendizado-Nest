@@ -1,13 +1,19 @@
 import { StatusPedido } from '../enums/status-pedido.enum';
 
+export class ClientePedidoResumidoDto {
+  id!: number;
+  nome!: string;
+}
+
+export class ProdutoPedidoResumidoDto {
+  id!: number;
+  nome!: string;
+}
+
 export class PedidoResumidoDto {
   id!: number;
-
-  produtoId!: number;
-
+  produto!: ProdutoPedidoResumidoDto;
   quantidade!: number;
-
-  clienteId!: number;
-
+  cliente!: ClientePedidoResumidoDto;
   status!: StatusPedido;
 }
