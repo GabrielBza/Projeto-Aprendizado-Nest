@@ -5,6 +5,11 @@ import { AtualizarClienteDto } from './dtos/atualizar-cliente-dto';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
+export type ClientePorStatus = {
+  nome: string;
+  quantidade: number;
+};
+
 // Service de clientes. Camada que contém as lógicas e regras de negócio e que se comunica com o banco de dados (repository abstraído) e com o controller.
 @Injectable()
 export class ClientesService {
@@ -69,5 +74,23 @@ export class ClientesService {
       mensagem: 'O cliente foi deletado com sucesso!',
       cliente: cliente,
     };
+  }
+
+  async contarTodos(): Promise<number> {
+    return this.clientesRepository.count();
+  }
+
+  async clientesPorStatus(): Promise<ClientePorStatus[]> {
+    const resultado_busca = await this.clientesRepository
+      .createQueryBuilder('cliente')
+      .select('cliente.status', 'nome')
+      .addSelect('COUNT(*)', 'quantidade')
+      .groupBy('cliente.status')
+      .getRawMany<ClientePorStatus>();
+
+    return resultado_busca.map((item) => ({
+      nome: item.nome,
+      quantidade: Number(item.quantidade),
+    }));
   }
 }

@@ -171,4 +171,7 @@ export class PedidosService {
 
     return { mensagem: 'Pedido deletado com sucesso.', pedido: pedidoResumido };
   }
+  async contarTodos(): Promise<number> {
+    return this.pedidosRepository.count();
+  }
 }

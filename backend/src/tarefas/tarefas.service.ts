@@ -6,6 +6,10 @@ import { TarefaEntity } from './tarefa.entity';
 import { Repository } from 'typeorm';
 import { StatusTarefa } from './enums/status-tarefa.enum';
 
+export interface TarefasPorStatus {
+  nome: StatusTarefa;
+  quantidade: number;
+}
 @Injectable()
 export class TarefasService {
   constructor(
@@ -74,5 +78,36 @@ export class TarefasService {
     await this.tarefasRepository.remove(tarefa);
 
     return { mensagem: 'Tarefa deletada com sucesso', tarefa: tarefa };
+  }
+
+  async contarTodos(): Promise<number> {
+    return this.tarefasRepository.count();
+  }
+
+  async tarefasPorStatus(): Promise<TarefasPorStatus[]> {
+    const pendentes: number = await this.tarefasRepository.count({
+      where: { status: StatusTarefa.PENDENTE },
+    });
+    const emAndamento: number = await this.tarefasRepository.count({
+      where: { status: StatusTarefa.EM_ANDAMENTO },
+    });
+    const concluidas: number = await this.tarefasRepository.count({
+      where: { status: StatusTarefa.CONCLUIDA },
+    });
+
+    return [
+      {
+        nome: StatusTarefa.PENDENTE,
+        quantidade: pendentes,
+      },
+      {
+        nome: StatusTarefa.EM_ANDAMENTO,
+        quantidade: emAndamento,
+      },
+      {
+        nome: StatusTarefa.CONCLUIDA,
+        quantidade: concluidas,
+      },
+    ];
   }
 }

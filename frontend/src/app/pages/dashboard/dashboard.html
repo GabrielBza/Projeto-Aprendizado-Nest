@@ -1,1 +1,87 @@
-<p>dashboard works!</p>
+<div class="corpo">
+  <div class="top">
+    <h1 class="titulo">Dashboard</h1>
+    <div class="contadores">
+      @for (contador of contadores(); track contador.nome) {
+        <div class="box-contador">
+          <h1 class="numero-contador">{{ contador.quantidade }}</h1>
+          <p class="nome-contador">
+            {{ contador.nome.charAt(0).toUpperCase() + contador.nome.slice(1) }}
+          </p>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="area-graficos">
+    <div class="graficos-simples">
+      <div class="grafico">
+        <apx-chart
+          [series]="seriesTarefasPorStatus()"
+          [chart]="graficoTarefasPorStatus.chart"
+          [labels]="labelsTarefasPorStatus()"
+          [title]="graficoTarefasPorStatus.title"
+          [legend]="graficoTarefasPorStatus.legend"
+          [colors]="graficoTarefasPorStatus.colors"
+          [plotOptions]="graficoTarefasPorStatus.plotOptions"
+        >
+        </apx-chart>
+      </div>
+      <div class="grafico">
+        <apx-chart
+          [series]="seriesProdutosPorCategoria()"
+          [chart]="graficoProdutosPorCategoria.chart"
+          [xaxis]="xaxisProdutosPorCategoria()"
+          [title]="graficoProdutosPorCategoria.title"
+          [plotOptions]="graficoProdutosPorCategoria.plotOptions"
+        >
+        </apx-chart>
+      </div>
+      <div class="grafico">
+        <apx-chart
+          [series]="seriesClientePorStatus()"
+          [chart]="graficoClientePorStatus.chart"
+          [labels]="labelsClientePorStatus()"
+          [title]="graficoClientePorStatus.title"
+          [legend]="graficoClientePorStatus.legend"
+          [colors]="coresClientePorStatus()"
+        >
+        </apx-chart>
+      </div>
+    </div>
+    <div class="graficos-simples">
+      <div class="grafico">
+        <apx-chart
+          [series]="seriesTarefasPorStatus()"
+          [chart]="graficoTarefasPorStatus.chart"
+          [labels]="labelsTarefasPorStatus()"
+          [title]="graficoTarefasPorStatus.title"
+          [legend]="graficoTarefasPorStatus.legend"
+          [colors]="graficoTarefasPorStatus.colors"
+          [plotOptions]="graficoTarefasPorStatus.plotOptions"
+        >
+        </apx-chart>
+      </div>
+      <div class="grafico">
+        <apx-chart
+          [series]="seriesProdutosPorCategoria()"
+          [chart]="graficoProdutosPorCategoria.chart"
+          [xaxis]="xaxisProdutosPorCategoria()"
+          [title]="graficoProdutosPorCategoria.title"
+          [plotOptions]="graficoProdutosPorCategoria.plotOptions"
+        >
+        </apx-chart>
+      </div>
+      <div class="grafico">
+        <apx-chart
+          [series]="seriesClientePorStatus()"
+          [chart]="graficoClientePorStatus.chart"
+          [labels]="labelsClientePorStatus()"
+          [title]="graficoClientePorStatus.title"
+          [legend]="graficoClientePorStatus.legend"
+          [colors]="coresClientePorStatus()"
+        >
+        </apx-chart>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,5 +9,6 @@ import { TarefasController } from './tarefas.controller';
   imports: [TypeOrmModule.forFeature([TarefaEntity])],
   providers: [TarefasService],
   controllers: [TarefasController],
+  exports: [TarefasService],
 })
 export class TarefasModule {}

@@ -5,6 +5,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProdutoEntity } from './produto.entity';
 import { Like, Repository } from 'typeorm';
 
+export type ProdutosPorCategoria = {
+  nome: string;
+  quantidade: number;
+};
+
 @Injectable()
 export class ProdutosService {
   constructor(
@@ -59,5 +64,20 @@ export class ProdutosService {
     await this.produtosRepository.remove(produto);
 
     return { mensagem: 'Produto deletado com sucesso!', produto: produto };
+  }
+
+  async contarTodos(): Promise<number> {
+    return this.produtosRepository.count();
+  }
+
+  async produtosPorCategoria(): Promise<ProdutosPorCategoria[]> {
+    const resultado = await this.produtosRepository
+      .createQueryBuilder('produto')
+      .select('produto.categoria', 'nome')
+      .addSelect('COUNT(*)', 'quantidade')
+      .groupBy('produto.categoria')
+      .getRawMany<ProdutosPorCategoria>();
+
+    return resultado;
   }
 }
