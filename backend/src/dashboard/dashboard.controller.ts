@@ -24,4 +24,19 @@ export class DashboardController {
   clientesPorStatus() {
     return this.dashboardService.clientesPorStatus();
   }
+
+  @Get('/topClientesPorPedido')
+  top3CategoriasMaisPedidas() {
+    return this.dashboardService.top3CategoriasMaisPedidas();
+  }
+
+  @Get('/pedidosPorTipoCliente')
+  pedidosPorTipoCliente() {
+    return this.dashboardService.pedidosPorTipoCliente();
+  }
+
+  @Get('/mediaUnidadesPorPedido')
+  mediaUnidadesPorPedido() {
+    return this.dashboardService.mediaUnidadesPorPedido();
+  }
 }

@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:8.4
+
+    container_name: mysql-db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: projeto_nest
+      MYSQL_USER: nest
+      MYSQL_PASSWORD: nest123
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - database-network
+
+volumes:
+  mysql_data:
+    external: true
+    name: fase3_mysql_data
+
+networks:
+  database-network:
+    external: true
+    name: projeto-aprendizado-network

@@ -12,75 +12,77 @@
       }
     </div>
   </div>
+  <hr class="divisor" />
   <div class="area-graficos">
-    <div class="graficos-simples">
-      <div class="grafico">
-        <apx-chart
-          [series]="seriesTarefasPorStatus()"
-          [chart]="graficoTarefasPorStatus.chart"
-          [labels]="labelsTarefasPorStatus()"
-          [title]="graficoTarefasPorStatus.title"
-          [legend]="graficoTarefasPorStatus.legend"
-          [colors]="graficoTarefasPorStatus.colors"
-          [plotOptions]="graficoTarefasPorStatus.plotOptions"
-        >
-        </apx-chart>
-      </div>
-      <div class="grafico">
-        <apx-chart
-          [series]="seriesProdutosPorCategoria()"
-          [chart]="graficoProdutosPorCategoria.chart"
-          [xaxis]="xaxisProdutosPorCategoria()"
-          [title]="graficoProdutosPorCategoria.title"
-          [plotOptions]="graficoProdutosPorCategoria.plotOptions"
-        >
-        </apx-chart>
-      </div>
-      <div class="grafico">
-        <apx-chart
-          [series]="seriesClientePorStatus()"
-          [chart]="graficoClientePorStatus.chart"
-          [labels]="labelsClientePorStatus()"
-          [title]="graficoClientePorStatus.title"
-          [legend]="graficoClientePorStatus.legend"
-          [colors]="coresClientePorStatus()"
-        >
-        </apx-chart>
+    <div class="secao-dashboard">
+      <h1 class="titulo-secao">Entidades X Marcadores</h1>
+      <div class="graficos">
+        <div class="grafico">
+          <apx-chart
+            [series]="seriesTarefasPorStatus()"
+            [chart]="graficoTarefasPorStatus.chart"
+            [labels]="labelsTarefasPorStatus()"
+            [title]="graficoTarefasPorStatus.title"
+            [legend]="graficoTarefasPorStatus.legend"
+            [colors]="graficoTarefasPorStatus.colors"
+            [plotOptions]="graficoTarefasPorStatus.plotOptions"
+          >
+          </apx-chart>
+        </div>
+        <div class="grafico">
+          <apx-chart
+            [series]="seriesProdutosPorCategoria()"
+            [chart]="graficoProdutosPorCategoria.chart"
+            [xaxis]="xaxisProdutosPorCategoria()"
+            [title]="graficoProdutosPorCategoria.title"
+            [plotOptions]="graficoProdutosPorCategoria.plotOptions"
+          >
+          </apx-chart>
+        </div>
+        <div class="grafico">
+          <apx-chart
+            [series]="seriesClientePorStatus()"
+            [chart]="graficoClientePorStatus.chart"
+            [labels]="labelsClientePorStatus()"
+            [title]="graficoClientePorStatus.title"
+            [legend]="graficoClientePorStatus.legend"
+            [colors]="coresClientePorStatus()"
+          >
+          </apx-chart>
+        </div>
       </div>
     </div>
-    <div class="graficos-simples">
-      <div class="grafico">
-        <apx-chart
-          [series]="seriesTarefasPorStatus()"
-          [chart]="graficoTarefasPorStatus.chart"
-          [labels]="labelsTarefasPorStatus()"
-          [title]="graficoTarefasPorStatus.title"
-          [legend]="graficoTarefasPorStatus.legend"
-          [colors]="graficoTarefasPorStatus.colors"
-          [plotOptions]="graficoTarefasPorStatus.plotOptions"
-        >
-        </apx-chart>
-      </div>
-      <div class="grafico">
-        <apx-chart
-          [series]="seriesProdutosPorCategoria()"
-          [chart]="graficoProdutosPorCategoria.chart"
-          [xaxis]="xaxisProdutosPorCategoria()"
-          [title]="graficoProdutosPorCategoria.title"
-          [plotOptions]="graficoProdutosPorCategoria.plotOptions"
-        >
-        </apx-chart>
-      </div>
-      <div class="grafico">
-        <apx-chart
-          [series]="seriesClientePorStatus()"
-          [chart]="graficoClientePorStatus.chart"
-          [labels]="labelsClientePorStatus()"
-          [title]="graficoClientePorStatus.title"
-          [legend]="graficoClientePorStatus.legend"
-          [colors]="coresClientePorStatus()"
-        >
-        </apx-chart>
+    <div class="secao-dashboard">
+      <h1 class="titulo-secao">Pedidos</h1>
+      <div class="graficos">
+        <div class="grafico">
+          <apx-chart
+            [series]="seriesTop3Categorias()"
+            [chart]="graficoTop3Categorias.chart"
+            [xaxis]="xaxisTop3Categorias()"
+            [title]="graficoTop3Categorias.title"
+            [plotOptions]="graficoTop3Categorias.plotOptions"
+          ></apx-chart>
+        </div>
+        <div class="grafico">
+          <apx-chart
+            [series]="seriesPedidosPorTipoCliente()"
+            [chart]="graficoPedidosPorTipoCliente.chart"
+            [labels]="labelsPedidosPorTipoCliente()"
+            [title]="graficoPedidosPorTipoCliente.title"
+            [legend]="graficoPedidosPorTipoCliente.legend"
+            [colors]="graficoPedidosPorTipoCliente.colors"
+            [plotOptions]="graficoPedidosPorTipoCliente.plotOptions"
+          ></apx-chart>
+        </div>
+        <div class="grafico">
+          <apx-chart
+            [series]="seriesMediaUnidadesPorPedido()"
+            [chart]="graficoMediaUnidadesPorPedido.chart"
+            [xaxis]="xaxisMediaUnidadesPorPedido()"
+            [title]="graficoMediaUnidadesPorPedido.title"
+          ></apx-chart>
+        </div>
       </div>
     </div>
   </div>

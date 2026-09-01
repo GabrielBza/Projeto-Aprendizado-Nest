@@ -26,4 +26,16 @@ export class DashboardService {
   clientesPorStatus(): Observable<Contador[]> {
     return this.http.get<Contador[]>(`${this.apiURL}/clientesPorStatus`);
   }
+
+  top3CategoriasMaisPedidas(): Observable<Contador[]> {
+    return this.http.get<Contador[]>(`${this.apiURL}/topClientesPorPedido`);
+  }
+
+  pedidosPorTipoCliente(): Observable<Contador[]> {
+    return this.http.get<Contador[]>(`${this.apiURL}/pedidosPorTipoCliente`);
+  }
+
+  mediaUnidadesPorPedido(): Observable<Contador[]> {
+    return this.http.get<Contador[]>(`${this.apiURL}/mediaUnidadesPorPedido`);
+  }
 }

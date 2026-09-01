@@ -13,7 +13,7 @@
   flex-direction: column;
 
   padding: 30px;
-  gap: 50px;
+  gap: 25px;
 
   overflow-y: auto;
 }
@@ -66,25 +66,35 @@
   margin: 6px 0 0;
 }
 
-.area-graficos {
-  background-color: #d4c27c;
-
-  display: flex;
-  flex-direction: column;
-
-  padding: 20px;
-  box-sizing: border-box;
-
-  gap: 80px;
-
-  border-radius: 16px;
+.divisor {
+  border: none;
+  border-top: 2px solid #d4c27c;
+  margin: 0px 0;
+  padding: 0px;
 }
 
-.graficos-simples {
+.titulo-secao {
+  margin: 5px;
+  font-weight: 700;
+}
+
+.area-graficos {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  gap: 30px;
+}
+
+.graficos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 
+  background-color: #d4c27c;
+  padding: 20px;
   gap: 18px;
+  border-radius: 16px;
 
   width: 100%;
   box-sizing: border-box;

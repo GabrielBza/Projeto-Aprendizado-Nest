@@ -11,6 +11,13 @@ import { PedidoResumidoDto } from './dtos/pedido-resumido.dto';
 import { StatusPedido } from './enums/status-pedido.enum';
 import { PedidoDetalhadoDto } from './dtos/pedido-detalhado';
 import { formatarPedidoDetalhado } from './mappers/pedido-detalhado.mapper';
+import { Contador } from '../dashboard/dashboard.service';
+
+export interface Quantidade {
+  nome: string;
+  quantidade: number;
+}
+
 @Injectable()
 export class PedidosService {
   constructor(
@@ -173,5 +180,54 @@ export class PedidosService {
   }
   async contarTodos(): Promise<number> {
     return this.pedidosRepository.count();
+  }
+
+  async top3CategoriasMaisPedidas(): Promise<Quantidade[]> {
+    const resultado_busca = await this.pedidosRepository
+      .createQueryBuilder('pedido')
+      .innerJoin('pedido.produto', 'produto')
+      .select('produto.categoria', 'nome')
+      .addSelect('COUNT(pedido.id)', 'quantidade')
+      .groupBy('produto.categoria')
+      .orderBy('quantidade', 'DESC')
+      .limit(3)
+      .getRawMany<Quantidade>();
+
+    return resultado_busca.map((item) => ({
+      nome: item.nome,
+      quantidade: Number(item.quantidade),
+    }));
+  }
+
+  async pedidosPorTipoDeCliente(): Promise<Quantidade[]> {
+    const resultado_busca = await this.pedidosRepository
+      .createQueryBuilder('pedido')
+      .innerJoin('pedido.cliente', 'cliente')
+      .select('cliente.tipo', 'nome')
+      .addSelect('COUNT(pedido.id)', 'quantidade')
+      .groupBy('cliente.tipo')
+      .orderBy('quantidade', 'DESC')
+      .getRawMany<Quantidade>();
+
+    return resultado_busca.map((item) => ({
+      nome: item.nome,
+      quantidade: Number(item.quantidade),
+    }));
+  }
+
+  async mediaUnidadesPorPedido(): Promise<Contador[]> {
+    const resultado = await this.pedidosRepository
+      .createQueryBuilder('pedido')
+      .innerJoin('pedido.produto', 'produto')
+      .select('produto.nome', 'nome')
+      .addSelect('AVG(pedido.quantidade)', 'quantidade')
+      .groupBy('produto.id')
+      .addGroupBy('produto.nome')
+      .getRawMany<Quantidade>();
+
+    return resultado.map((item) => ({
+      nome: item.nome,
+      quantidade: Number(item.quantidade),
+    }));
   }
 }

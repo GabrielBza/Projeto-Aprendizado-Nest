@@ -43,4 +43,16 @@ export class DashboardService {
   async clientesPorStatus(): Promise<Contador[]> {
     return this.clientesService.clientesPorStatus();
   }
+
+  async top3CategoriasMaisPedidas(): Promise<Contador[]> {
+    return this.pedidosService.top3CategoriasMaisPedidas();
+  }
+
+  async pedidosPorTipoCliente(): Promise<Contador[]> {
+    return this.pedidosService.pedidosPorTipoDeCliente();
+  }
+
+  async mediaUnidadesPorPedido(): Promise<Contador[]> {
+    return this.pedidosService.mediaUnidadesPorPedido();
+  }
 }

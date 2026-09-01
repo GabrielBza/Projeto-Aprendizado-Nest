@@ -1,39 +1,4 @@
-services:
-  backend:
-    build:
-      context: ./backend
-
-    container_name: nest-backend
-
-    ports:
-      - "3000:3000"
-
-    volumes:
-      - ./backend:/app
-      - node_modules_backend:/app/node_modules
-
-    command: npm run start:dev
-
-    depends_on:
-      - mysql
-
-  mysql:
-    image: mysql:8.4
-
-    container_name: mysql-db
-
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: projeto_nest
-      MYSQL_USER: nest
-      MYSQL_PASSWORD: nest123
-
-    ports:
-      - "3306:3306"
-
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-volumes:
-  node_modules_backend:
-  mysql_data:
+include:
+  - ./database/docker-compose.yml
+  - ./backend/docker-compose.yml
+  - ./frontend/docker-compose.yml

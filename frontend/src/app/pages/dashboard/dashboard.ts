@@ -31,9 +31,6 @@ export class DashboardPage implements OnInit {
     chart: {
       type: 'pie',
       height: 300,
-      toolbar: {
-        show: false,
-      },
     } as ApexChart,
 
     colors: ['rgb(159, 29, 29)', 'rgb(194, 144, 86)', 'rgb(2, 98, 65)'],
@@ -109,6 +106,83 @@ export class DashboardPage implements OnInit {
   labelsClientePorStatus = signal<string[]>([]);
   coresClientePorStatus = signal<string[]>([]);
 
+  graficoTop3Categorias = {
+    chart: {
+      type: 'bar',
+      height: 300,
+      toolbar: {
+        show: false,
+      },
+    } as ApexChart,
+
+    plotOptions: {
+      bar: {
+        horizontal: true,
+      },
+    } as ApexPlotOptions,
+
+    title: {
+      text: 'Top 3 categorias com mais pedidos',
+      align: 'center',
+    } as ApexTitleSubtitle,
+  };
+
+  seriesTop3Categorias = signal<ApexAxisChartSeries>([]);
+
+  xaxisTop3Categorias = signal<ApexXAxis>({
+    categories: [],
+  });
+
+  graficoPedidosPorTipoCliente = {
+    chart: {
+      type: 'pie',
+      height: 300,
+    } as ApexChart,
+
+    colors: ['rgb(255, 174, 0)', 'rgb(0, 28, 26)', 'rgb(126, 76, 0);'],
+
+    title: {
+      text: 'Pedidos por tipo de cliente',
+      align: 'center',
+    } as ApexTitleSubtitle,
+
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          offset: -15,
+        },
+      },
+    } as ApexPlotOptions,
+
+    legend: {
+      position: 'bottom',
+    } as ApexLegend,
+  };
+
+  seriesPedidosPorTipoCliente = signal<ApexNonAxisChartSeries>([]);
+  labelsPedidosPorTipoCliente = signal<string[]>([]);
+
+  graficoMediaUnidadesPorPedido = {
+    chart: {
+      type: 'bar',
+      height: 300,
+      toolbar: {
+        show: false,
+      },
+    } as ApexChart,
+
+    title: {
+      text: 'Média de Unidades por Pedido',
+      align: 'center',
+    } as ApexTitleSubtitle,
+  };
+
+  seriesMediaUnidadesPorPedido = signal<ApexAxisChartSeries>([]);
+
+  xaxisMediaUnidadesPorPedido = signal<ApexXAxis>({
+    categories: [],
+  });
+
   // FUNÇÕES
 
   ngOnInit(): void {
@@ -116,6 +190,9 @@ export class DashboardPage implements OnInit {
     this.carregarTarefasPorStatus();
     this.carregarProdutosPorCategoria();
     this.carregarClientesPorStatus();
+    this.carregarTop3Categorias();
+    this.carregarPedidosPorTipoCliente();
+    this.carregarMediaUnidadesPorPedido();
   }
 
   carregarContadores() {
@@ -129,6 +206,8 @@ export class DashboardPage implements OnInit {
       },
     });
   }
+
+  // Gráficos - Entidades X Marcadores
 
   carregarTarefasPorStatus() {
     this.dashboardService.tarefasPorStatus().subscribe({
@@ -208,5 +287,69 @@ export class DashboardPage implements OnInit {
     }
 
     return 'rgb(128, 128, 128)';
+  }
+
+  carregarTop3Categorias() {
+    this.dashboardService.top3CategoriasMaisPedidas().subscribe({
+      next: (contadores) => {
+        this.montarGraficoTop3Categorias(contadores);
+      },
+
+      error: (erro) => {
+        console.error('Não foi possível buscar o top3 mais vendidos', erro);
+      },
+    });
+  }
+
+  montarGraficoTop3Categorias(contadores: Contador[]) {
+    this.seriesTop3Categorias.set([
+      {
+        name: 'Pedidos',
+        data: contadores.map((categoria) => categoria.quantidade),
+      },
+    ]);
+
+    this.xaxisTop3Categorias.set({
+      categories: contadores.map((categoria) => categoria.nome),
+    });
+  }
+
+  carregarPedidosPorTipoCliente() {
+    this.dashboardService.pedidosPorTipoCliente().subscribe({
+      next: (tipos) => {
+        this.montarGraficoPedidosPorTipoCliente(tipos);
+      },
+      error: (erro) => {
+        console.error('Não foi possível reunir os pedidos e as categorias', erro);
+      },
+    });
+  }
+
+  montarGraficoPedidosPorTipoCliente(contadores: Contador[]) {
+    this.labelsPedidosPorTipoCliente.set(contadores.map((tipo) => tipo.nome));
+    this.seriesPedidosPorTipoCliente.set(contadores.map((tipo) => tipo.quantidade));
+  }
+
+  carregarMediaUnidadesPorPedido() {
+    this.dashboardService.mediaUnidadesPorPedido().subscribe({
+      next: (medias) => {
+        this.montarGraficoMediaUnidadesPorPedido(medias);
+      },
+      error: (erro) => {
+        console.error('Não foi possível carregar as médias', erro);
+      },
+    });
+  }
+
+  montarGraficoMediaUnidadesPorPedido(contadores: Contador[]) {
+    this.seriesMediaUnidadesPorPedido.set([
+      {
+        name: 'Pedidos',
+        data: contadores.map((contador) => contador.quantidade),
+      },
+    ]);
+    this.xaxisMediaUnidadesPorPedido.set({
+      categories: contadores.map((contador) => contador.nome),
+    });
   }
 }
