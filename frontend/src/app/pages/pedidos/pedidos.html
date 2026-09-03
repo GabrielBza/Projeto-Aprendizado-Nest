@@ -12,14 +12,16 @@
   </div>
 
   <div class="interacoes">
-    <app-botao texto="Novo Pedido" tipo="primario" (clicado)="abrirCriacao()"></app-botao>
+    @if (eAdmin()) {
+      <app-botao texto="Novo Pedido" tipo="primario" (clicado)="abrirCriacao()"></app-botao>
+    }
   </div>
 
   <div class="corpo">
     <app-tabela
       [colunas]="colunas"
       [dados]="pedidos()"
-      [mostrarVisualizar]="true"
+      [mostrarVisualizar]="eAdmin()"
       (visualizar)="abrirDetalhes($event)"
     ></app-tabela>
   </div>

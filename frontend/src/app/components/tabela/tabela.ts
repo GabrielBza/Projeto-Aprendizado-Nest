@@ -12,6 +12,9 @@ export interface ColunaTabela {
 
   tipoTag?: (valor: any) => TipoTag;
   textoTag?: (valor: any) => string;
+
+  largura?: string;
+  truncar?: boolean;
 }
 
 export interface LinhaTabela {

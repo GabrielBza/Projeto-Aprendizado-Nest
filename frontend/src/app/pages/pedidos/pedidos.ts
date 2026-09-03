@@ -28,6 +28,7 @@ import { SelectComponent } from '../../components/select/select';
 import { InputComponent } from '../../components/input/input';
 import { AtualizarPedido } from '../../models/pedido/atualizar-pedido';
 import { CriarPedido } from '../../models/pedido/criar-pedido';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-pedidos',
@@ -48,6 +49,7 @@ export class PedidosPage implements OnInit {
     private pedidosService: PedidosService,
     private clientesService: ClienteService,
     private produtosService: ProdutoService,
+    private authService: AuthService,
   ) {}
 
   clientes = signal<Cliente[]>([]);
@@ -291,5 +293,9 @@ export class PedidosPage implements OnInit {
 
   alterarExclusao(aberto: boolean) {
     this.popupExclusaoAberto.set(aberto);
+  }
+
+  eAdmin(): boolean {
+    return this.authService.eAdmin();
   }
 }

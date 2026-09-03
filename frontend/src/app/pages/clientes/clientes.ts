@@ -11,13 +11,13 @@ import { CriarCliente } from '../../models/cliente/criar-cliente';
 import { AtualizarCliente } from '../../models/cliente/AtualizarCliente';
 import { TipoCliente } from '../../enums/clientes/tipo-cliente.enum';
 import { StatusCliente } from '../../enums/clientes/status-cliente.enum';
-import { TipoTag } from '../../components/tag/tag';
 import {
   tipoTagStatusCliente,
   textoTagStatusCliente,
   tipoTagTipoCliente,
   textoTagTipoCliente,
 } from '../../utils/tag-formatter';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-clientes',
@@ -33,7 +33,10 @@ import {
   styleUrl: './clientes.css',
 })
 export class ClientesPage implements OnInit {
-  constructor(private clienteService: ClienteService) {}
+  constructor(
+    private clienteService: ClienteService,
+    private authService: AuthService,
+  ) {}
 
   TipoCliente = TipoCliente;
   StatusCliente = StatusCliente;
@@ -267,5 +270,9 @@ export class ClientesPage implements OnInit {
 
   alterarStatusCliente(valor: string) {
     this.statusModalCliente = valor as StatusCliente;
+  }
+
+  eAdmin(): boolean {
+    return this.authService.eAdmin();
   }
 }

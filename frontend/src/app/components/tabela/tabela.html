@@ -3,7 +3,11 @@
     <thead>
       <tr>
         @for (coluna of colunas; track coluna.campo) {
-          <th>{{ coluna.titulo }}</th>
+          <th>
+            <div class="conteudo-coluna" [style.width]="coluna.largura">
+              {{ coluna.titulo }}
+            </div>
+          </th>
         }
         @if (mostrarBotoes || mostrarVisualizar) {
           <th></th>
@@ -16,14 +20,21 @@
         <tr>
           @for (coluna of colunas; track coluna.campo) {
             <td>
-              @if (coluna.mostrarComoTag) {
-                <app-tag
-                  [tipo]="tipoDaTag(linha, coluna)"
-                  [texto]="textoDaTag(linha, coluna)"
-                ></app-tag>
-              } @else {
-                {{ valorCelula(linha, coluna.campo) }}
-              }
+              <div
+                class="conteudo-coluna"
+                [class.conteudo-truncado]="coluna.truncar"
+                [style.width]="coluna.largura"
+                [attr.title]="coluna.truncar ? valorCelula(linha, coluna.campo) : null"
+              >
+                @if (coluna.mostrarComoTag) {
+                  <app-tag
+                    [tipo]="tipoDaTag(linha, coluna)"
+                    [texto]="textoDaTag(linha, coluna)"
+                  ></app-tag>
+                } @else {
+                  {{ valorCelula(linha, coluna.campo) }}
+                }
+              </div>
             </td>
           }
 

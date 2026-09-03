@@ -1,0 +1,83 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.pagina-login {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px;
+  box-sizing: border-box;
+
+  background-color: var(--color-petroleo);
+}
+
+.container-login {
+  width: 100%;
+  max-width: 420px;
+}
+
+.conteudo-login {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  padding: 14px 8px;
+}
+
+.cabecalho-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+
+  text-align: center;
+}
+
+.logo {
+  margin: 0;
+
+  color: var(--color-petroleo);
+  font-size: 32px;
+}
+
+.cabecalho-login h2 {
+  margin: 0;
+
+  color: var(--color-petroleo);
+  font-size: 26px;
+}
+
+.cabecalho-login p {
+  margin: 6px 0 0;
+
+  color: var(--color-petroleo-suave);
+  font-size: 14px;
+}
+
+.formulario-login {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formulario-login app-botao {
+  display: block;
+  width: 100%;
+
+  margin-top: 6px;
+}
+
+.erro-login {
+  margin: 0;
+
+  color: var(--color-perigo);
+  font-size: 14px;
+  font-weight: 600;
+}

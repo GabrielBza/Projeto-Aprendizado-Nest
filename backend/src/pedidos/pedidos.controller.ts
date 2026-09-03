@@ -13,6 +13,13 @@ import { AtualizarPedidoDto } from './dtos/atualizar-pedido.dto';
 import { CriarPedidoDto } from './dtos/criar-pedido.dto';
 import { PedidoResumidoDto } from './dtos/pedido-resumido.dto';
 import { PedidoDetalhadoDto } from './dtos/pedido-detalhado';
+import { AuthGuard } from '../auth/auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { TipoUsuario } from '../usuarios/enums/tipo-usuario.enum';
+import { RolesGuard } from '../auth/roles.guard';
+
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('pedidos')
 export class PedidosController {
   constructor(private readonly pedidosService: PedidosService) {}
@@ -43,11 +50,13 @@ export class PedidosController {
     return this.pedidosService.buscarPorId(id);
   }
 
+  @Roles(TipoUsuario.ADMIN)
   @Post()
   criar(@Body() dados: CriarPedidoDto): Promise<PedidoResumidoDto> {
     return this.pedidosService.criar(dados);
   }
 
+  @Roles(TipoUsuario.ADMIN)
   @Patch(':id')
   atualizar(
     @Param('id', ParseIntPipe) id: number,
@@ -56,6 +65,7 @@ export class PedidosController {
     return this.pedidosService.atualizar(id, dados);
   }
 
+  @Roles(TipoUsuario.ADMIN)
   @Delete(':id')
   deletar(
     @Param('id', ParseIntPipe) id: number,

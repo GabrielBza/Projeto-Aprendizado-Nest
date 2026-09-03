@@ -7,6 +7,8 @@ import { ProdutosModule } from './produtos/produtos.module';
 import { ClientesModule } from './clientes/clientes.module';
 import { PedidosModule } from './pedidos/pedidos.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     DatabaseModule,
     PedidosModule,
     DashboardModule,
+    UsuariosModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

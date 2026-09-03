@@ -1,0 +1,42 @@
+<div class="pagina-login">
+  <div class="container-login">
+    <app-card>
+      <div class="conteudo-login">
+        <div class="cabecalho-login">
+          <h1 class="logo">Origem</h1>
+
+          <div>
+            <h2>Login</h2>
+            <p>Acesse sua conta para continuar</p>
+          </div>
+        </div>
+
+        <form class="formulario-login" (ngSubmit)="entrar()">
+          <app-input
+            label="Email"
+            tipo="email"
+            placeholder="Digite seu email"
+            [valor]="email"
+            (trocaValor)="email = $event"
+          ></app-input>
+
+          <app-input
+            label="Senha"
+            tipo="password"
+            placeholder="Digite sua senha"
+            [valor]="senha"
+            (trocaValor)="senha = $event"
+          ></app-input>
+
+          @if (erro()) {
+            <p class="erro-login">
+              {{ erro() }}
+            </p>
+          }
+
+          <app-botao texto="Entrar" tipo="secundario"></app-botao>
+        </form>
+      </div>
+    </app-card>
+  </div>
+</div>

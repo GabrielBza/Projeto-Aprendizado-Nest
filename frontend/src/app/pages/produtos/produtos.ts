@@ -17,6 +17,7 @@ import {
   tipoTagDisponibilidadeProduto,
   textoTagDisponibilidadeProduto,
 } from '../../utils/tag-formatter';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-produtos',
@@ -32,7 +33,10 @@ import {
   styleUrl: './produtos.css',
 })
 export class ProdutosPage implements OnInit {
-  constructor(private produtoService: ProdutoService) {}
+  constructor(
+    private produtoService: ProdutoService,
+    private authService: AuthService,
+  ) {}
 
   produtos = signal<Produto[]>([]);
 
@@ -46,14 +50,36 @@ export class ProdutosPage implements OnInit {
   produtoSelecionadoId: number | null = null;
 
   colunas: ColunaTabela[] = [
-    { titulo: 'ID', campo: 'id' },
-    { titulo: 'Nome', campo: 'nome' },
-    { titulo: 'Descrição', campo: 'descricao' },
-    { titulo: 'Preço', campo: 'preco' },
+    {
+      titulo: 'ID',
+      campo: 'id',
+      largura: '50px',
+    },
+
+    {
+      titulo: 'Nome',
+      campo: 'nome',
+      largura: '160px',
+      truncar: true,
+    },
+
+    {
+      titulo: 'Descrição',
+      campo: 'descricao',
+      largura: '350px',
+      truncar: true,
+    },
+
+    {
+      titulo: 'Preço',
+      campo: 'preco',
+      largura: '90px',
+    },
 
     {
       titulo: 'Categoria',
       campo: 'categoria',
+      largura: '130px',
       mostrarComoTag: true,
       tipoTag: tipoTagCategoriaProduto,
       textoTag: textoTagCategoriaProduto,
@@ -62,6 +88,7 @@ export class ProdutosPage implements OnInit {
     {
       titulo: 'Disponível',
       campo: 'disponivel',
+      largura: '130px',
       mostrarComoTag: true,
       tipoTag: tipoTagDisponibilidadeProduto,
       textoTag: textoTagDisponibilidadeProduto,
@@ -260,5 +287,9 @@ export class ProdutosPage implements OnInit {
 
   alterarCategoriaProduto(valor: string) {
     this.modalCategoriaProduto = valor as CategoriaProduto;
+  }
+
+  eAdmin(): boolean {
+    return this.authService.eAdmin();
   }
 }

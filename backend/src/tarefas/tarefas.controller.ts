@@ -7,12 +7,15 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { TarefasService } from './tarefas.service';
 import { CriarTarefaDto } from './dtos/criar-tarefa-dto';
 import { AtualizarTarefaDto } from './dtos/atualizar-tarefa-dto';
 import { TarefaEntity } from './tarefa.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('tarefas')
 export class TarefasController {
   constructor(private readonly tarefasService: TarefasService) {}

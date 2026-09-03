@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BotaoComponent } from '../botao/botao';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,9 +11,12 @@ import { BotaoComponent } from '../botao/botao';
   styleUrl: './sidebar.css',
 })
 export class SidebarComponent {
-  @Output() sair = new EventEmitter<void>();
+  constructor(private router: Router) {}
 
-  aoSair() {
-    this.sair.emit();
+  sair() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+
+    this.router.navigate(['/login']);
   }
 }
