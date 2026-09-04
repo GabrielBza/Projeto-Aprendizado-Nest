@@ -1,30 +1,93 @@
 # Projeto Full Stack
 
-Aplicação full stack para gerenciamento de **clientes, produtos, tarefas e pedidos**, com frontend em Angular, backend em NestJS e banco de dados MySQL.
+Aplicação full stack para gerenciamento de **clientes, produtos, tarefas e pedidos**, desenvolvida com Angular no frontend, NestJS no backend, MySQL como banco de dados e Nginx como ponto único de entrada da aplicação.
 
-O sistema possui operações de cadastro, consulta, edição e exclusão dos registros, além de buscas, relacionamentos entre entidades e um dashboard com informações gerais da aplicação.
+O sistema possui operações de cadastro, consulta, edição e exclusão de registros, filtros, relacionamentos entre entidades, autenticação com JWT, controle de acesso por perfil e um dashboard com informações gerais da aplicação.
 
-## Como o sistema funciona
+---
 
-A aplicação é dividida em três partes:
+# Como o sistema funciona
+
+A aplicação está organizada em quatro partes principais:
 
 ```text
-Frontend Angular
-      ↓
-API NestJS
-      ↓
-TypeORM
-      ↓
-MySQL
+Browser
+   ↓
+Nginx :8080
+   ├── /      → arquivos estáticos do Angular
+   └── /api   → API NestJS
+                    ↓
+                  TypeORM
+                    ↓
+                  MySQL
 ```
 
-- **Frontend:** interface utilizada pelo usuário.
-- **Backend:** API responsável pelas regras de negócio e acesso aos dados.
-- **Banco de dados:** armazena os registros da aplicação.
+- **Frontend:** interface Angular utilizada pelo usuário.
+- **Nginx:** ponto único de entrada da aplicação. Serve os arquivos estáticos do Angular e encaminha as requisições `/api` para o backend.
+- **Backend:** API NestJS responsável pelas regras de negócio, autenticação, autorização e acesso aos dados.
+- **Banco de dados:** MySQL responsável pela persistência das informações.
 
-O frontend e o backend são executados em containers Docker através de um Docker Compose.
+---
 
-O MySQL é executado separadamente, em outro Docker Compose, funcionando como um serviço independente. A comunicação entre o backend e o banco acontece através de uma Docker Network compartilhada.
+# Arquitetura Docker
+
+O projeto utiliza Docker Compose dividido por responsabilidade:
+
+```text
+Projeto
+│
+├── frontend/
+│   ├── Dockerfile
+│   └── docker-compose.yml
+│       └── frontend-build
+│
+├── backend/
+│   ├── Dockerfile
+│   └── docker-compose.yml
+│       └── nest-backend
+│
+├── database/
+│   └── docker-compose.yml
+│       └── mysql-db
+│
+├── nginx/
+│   ├── nginx.conf
+│   └── docker-compose.yml
+│       └── nginx
+│
+└── docker-compose.yml
+    └── inclui os serviços da aplicação
+```
+
+Os containers permanentes são:
+
+```text
+nginx
+nest-backend
+mysql-db
+```
+
+O serviço:
+
+```text
+frontend-build
+```
+
+é um **job temporário**. Ele executa `npm run build`, gera o `dist/` do Angular e termina com `Exited (0)` quando o processo é concluído corretamente.
+
+O Nginx depende desse job:
+
+```text
+frontend-build
+      ↓
+ npm run build
+      ↓
+    dist/
+      ↓
+ Exited (0)
+      ↓
+    Nginx
+```
 
 ---
 
@@ -43,7 +106,7 @@ Não é necessário instalar Node.js, Angular, NestJS ou MySQL diretamente na m�
 ## 1. Clonar o repositório
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/GabrielBza/Projeto-Aprendizado-Nest.git
 cd Projeto-Aprendizado-Nest
 ```
 
@@ -69,105 +132,35 @@ DB_PORT=3306
 DB_USER=nest
 DB_PASSWORD=nest123
 DB_NAME=projeto_nest
+
+JWT_SECRET=uma_chave_secreta
 ```
 
 Descrição:
 
-- `PORT`: porta utilizada pela API NestJS.
+- `PORT`: porta interna utilizada pela API NestJS.
 - `DB_HOST`: nome do serviço/container MySQL acessível pela Docker Network.
 - `DB_PORT`: porta interna do MySQL.
 - `DB_USER`: usuário utilizado pelo backend para acessar o banco.
 - `DB_PASSWORD`: senha do usuário do banco.
 - `DB_NAME`: nome do banco utilizado pela aplicação.
+- `JWT_SECRET`: chave utilizada para assinar e validar os tokens JWT.
 
-> Dentro da rede Docker, o backend deve acessar o MySQL pelo nome do serviço, e não por `localhost`.
-
-### Banco de dados
-
-No diretório responsável pelo MySQL, crie:
-
-```text
-database/.env
-```
-
-Exemplo:
-
-```env
-MYSQL_ROOT_PASSWORD=root
-MYSQL_DATABASE=projeto_nest
-MYSQL_USER=nest
-MYSQL_PASSWORD=nest123
-```
-
-Os valores de:
-
-```text
-MYSQL_DATABASE
-MYSQL_USER
-MYSQL_PASSWORD
-```
-
-devem corresponder respectivamente a:
-
-```text
-DB_NAME
-DB_USER
-DB_PASSWORD
-```
-
-configurados no backend.
-
-### Frontend
-
-O frontend utiliza a URL da API para realizar as requisições HTTP.
-
-A configuração deve apontar para:
-
-```text
-http://localhost:3000
-```
-
-quando o sistema estiver sendo acessado localmente pelo navegador.
-
-Caso o projeto utilize uma variável de ambiente para essa configuração, utilize:
-
-```env
-API_URL=http://localhost:3000
-```
+> Dentro da rede Docker, o backend acessa o MySQL pelo nome do serviço, e não por `localhost`.
 
 ## 3. Criar a Docker Network compartilhada
 
-Como o banco e a aplicação utilizam Docker Compose separados, ambos precisam estar conectados à mesma network.
+Os serviços utilizam uma Docker Network externa compartilhada.
 
 Crie a network uma única vez:
 
 ```bash
-docker network create projeto-network
+docker network create projeto-aprendizado-network
 ```
 
-Caso ela já exista, não é necessário executar esse comando novamente.
+Caso ela já exista, não é necessário executar o comando novamente.
 
-## 4. Iniciar o banco de dados
-
-Entre no diretório responsável pelo banco:
-
-```bash
-cd database
-```
-
-Inicie o MySQL:
-
-```bash
-docker compose up -d
-```
-
-Depois retorne para a raiz do projeto:
-
-```bash
-cd ..
-```
-
-## 5. Iniciar frontend e backend
+## 4. Subir a aplicação
 
 Na raiz do projeto:
 
@@ -175,52 +168,160 @@ Na raiz do projeto:
 docker compose up -d --build
 ```
 
-Esse comando inicia:
+Durante a inicialização:
 
-- Frontend Angular
-- Backend NestJS
+```text
+1. MySQL é iniciado
+2. Backend NestJS é iniciado
+3. frontend-build executa npm run build
+4. frontend-build termina com sucesso
+5. Nginx inicia e passa a servir a aplicação
+```
 
-O backend se comunica com o MySQL através da Docker Network compartilhada.
-
-## 6. Acessar a aplicação
+## 5. Acessar a aplicação
 
 Com os containers em execução:
 
 ```text
-Frontend:
-http://localhost:4200
+Aplicação:
+http://localhost:8080
 
-Backend:
-http://localhost:3000
-
-Swagger:
-http://localhost:3000/docs
+Swagger via Nginx:
+http://localhost:8080/api/docs
 ```
 
-## Verificar os containers
+O navegador utiliza apenas o Nginx como ponto de entrada. As chamadas do frontend para o backend são feitas através de caminhos relativos iniciados por `/api`.
 
-Para visualizar os containers em execução:
+Exemplo:
+
+```http
+GET /api/clientes
+```
+
+O Nginx recebe a requisição e a encaminha internamente para o NestJS.
+
+---
+
+# Build do frontend durante o desenvolvimento
+
+Como o Angular é servido pelo Nginx como arquivos estáticos, alterações feitas no frontend precisam gerar um novo build.
+
+Na raiz do projeto:
+
+```bash
+docker compose run --rm frontend-build
+```
+
+Esse comando:
+
+```text
+código Angular alterado
+        ↓
+frontend-build
+        ↓
+npm run build
+        ↓
+frontend/dist/frontend/browser
+        ↓
+Nginx passa a servir os novos arquivos
+```
+
+Depois do build, atualize o navegador. Em caso de cache, utilize um hard refresh.
+
+---
+
+# Verificar os containers
+
+Para visualizar apenas os containers em execução:
 
 ```bash
 docker ps
 ```
 
-## Parar os serviços
+O esperado é encontrar os serviços permanentes:
 
-Para interromper frontend e backend:
+```text
+nginx
+nest-backend
+mysql-db
+```
+
+Para visualizar também containers finalizados:
+
+```bash
+docker ps -a
+```
+
+Nesse caso, o job do frontend pode aparecer como:
+
+```text
+frontend-build    Exited (0)
+```
+
+`Exited (0)` indica que o build terminou corretamente.
+
+---
+
+# Parar os serviços
+
+Na raiz do projeto:
 
 ```bash
 docker compose down
 ```
 
-Para interromper o banco:
+Os dados do MySQL permanecem armazenados no volume Docker mesmo após a remoção do container.
 
-```bash
-cd database
-docker compose down
+---
+
+# Autenticação e autorização
+
+A aplicação utiliza autenticação baseada em **JWT (JSON Web Token)**.
+
+O fluxo de autenticação funciona assim:
+
+```text
+Usuário envia email e senha
+        ↓
+NestJS valida as credenciais
+        ↓
+Backend gera um JWT
+        ↓
+Frontend salva o token no localStorage
+        ↓
+Interceptor adiciona o token às requisições
+        ↓
+Authorization: Bearer <token>
 ```
 
-Os dados do MySQL permanecem armazenados no volume Docker mesmo após o container ser removido.
+O backend valida o token antes de liberar o acesso às rotas protegidas.
+
+O payload do JWT contém informações como:
+
+```text
+sub
+email
+role
+iat
+exp
+```
+
+A aplicação possui dois perfis de usuário:
+
+```text
+USER
+ADMIN
+```
+
+### USER
+
+Possui acesso de leitura às informações permitidas pelo sistema.
+
+### ADMIN
+
+Possui acesso às operações de criação, edição e exclusão.
+
+O frontend utiliza a role do JWT apenas para controlar a exibição de elementos da interface. A validação real de autorização é realizada pelo backend através de Guards.
 
 ---
 
@@ -267,8 +368,10 @@ Permite:
 - Criar pedidos
 - Editar pedidos
 - Excluir pedidos
+- Visualizar detalhes do pedido
 - Relacionar pedidos a clientes
 - Relacionar pedidos a produtos
+- Controlar o status dos pedidos
 
 Os principais relacionamentos são:
 
@@ -301,65 +404,69 @@ As listagens também podem receber filtros através de query parameters.
 Exemplo:
 
 ```http
-GET /clientes?nome=Gabriel
+GET /api/clientes?nome=Gabriel
 ```
 
 Sem filtro:
 
 ```http
-GET /clientes
+GET /api/clientes
 ```
 
 retorna todos os registros disponíveis.
 
 ## Swagger
 
-A documentação da API pode ser acessada em:
+A documentação da API pode ser acessada através do Nginx:
 
 ```text
-http://localhost:3000/docs
+http://localhost:8080/api/docs
 ```
 
 Pelo Swagger é possível visualizar e testar os endpoints disponíveis.
 
 ---
 
-# Estrutura do projeto
+# Nginx
+
+O Nginx funciona como o único ponto de entrada da aplicação.
+
+Sua responsabilidade é separar as requisições pelo caminho recebido:
 
 ```text
-Projeto
-│
-├── frontend/
-│   └── Aplicação Angular
-│
-├── backend/
-│   ├── API NestJS
-│   └── .env
-│
-├── database/
-│   ├── Docker Compose do MySQL
-│   └── .env
-│
-└── docker-compose.yml
-    └── Frontend + Backend
+/       → Angular
+/api/   → NestJS
 ```
+
+Para o frontend, o Nginx serve diretamente os arquivos gerados pelo build do Angular.
+
+Para a API, ele atua como reverse proxy:
+
+```text
+Browser
+   ↓
+/api/clientes
+   ↓
+Nginx
+   ↓
+nest-backend:3000/clientes
+```
+
+O uso de `try_files` permite que rotas do Angular, como `/clientes` ou `/produtos`, funcionem corretamente mesmo quando acessadas diretamente pelo navegador.
 
 ---
 
 # Docker e persistência
 
-Frontend, backend e banco de dados são executados em containers separados.
+Os serviços se comunicam através da Docker Network compartilhada:
 
 ```text
-Docker Compose da aplicação
-├── Angular
-└── NestJS
-       │
-       │ projeto-network
-       ↓
-Docker Compose do banco
-└── MySQL
+                  projeto-aprendizado-network
+
+Nginx ────────────────────── NestJS ────────────────────── MySQL
 ```
+
+O backend e o banco não precisam ser acessados diretamente pelo navegador. O Nginx centraliza a entrada HTTP da aplicação.
 
 O MySQL utiliza um Docker Volume para persistir os dados:
 
@@ -377,11 +484,9 @@ Dessa forma, reiniciar ou recriar o container do banco não remove automaticamen
 
 # Variáveis de ambiente
 
-Os arquivos `.env` contêm configurações específicas do ambiente e não devem armazenar valores diretamente no código-fonte.
+Os arquivos `.env` contêm configurações específicas do ambiente e não devem ter seus valores reais versionados no repositório.
 
-Os arquivos reais `.env` não devem ser versionados.
-
-O repositório deve manter arquivos `.env.example` contendo apenas os nomes das variáveis e valores de exemplo:
+O projeto deve manter arquivos `.env.example` contendo apenas os nomes das variáveis e valores de exemplo:
 
 ```text
 backend/.env.example
@@ -397,6 +502,7 @@ DB_PORT=3306
 DB_USER=usuario
 DB_PASSWORD=senha
 DB_NAME=nome_do_banco
+JWT_SECRET=chave_secreta_de_exemplo
 ```
 
 Exemplo de `database/.env.example`:
@@ -425,6 +531,8 @@ MYSQL_PASSWORD=senha
 - TypeScript
 - TypeORM
 - Swagger
+- JWT
+- bcrypt
 
 ### Banco de dados
 
@@ -436,3 +544,22 @@ MYSQL_PASSWORD=senha
 - Docker Compose
 - Docker Networks
 - Docker Volumes
+- Nginx
+
+---
+
+# Resumo da arquitetura
+
+```text
+Browser
+   ↓
+localhost:8080
+   ↓
+Nginx
+   ├── / → Angular estático
+   └── /api → NestJS
+                  ↓
+                MySQL
+```
+
+O projeto foi estruturado para separar claramente as responsabilidades entre interface, API, persistência e infraestrutura, mantendo cada parte isolada e comunicando-se através da rede Docker.
