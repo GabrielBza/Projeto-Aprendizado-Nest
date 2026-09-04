@@ -7,7 +7,7 @@ import { Contador } from '../models/dashboard/contador';
   providedIn: 'root',
 })
 export class DashboardService {
-  private apiURL = 'http://localhost:3000/dashboard';
+  private apiURL = '/api/dashboard';
 
   constructor(private http: HttpClient) {}
 

@@ -7,7 +7,7 @@ import { AtualizarTarefa } from '../models/tarefas/atualizar-tarefa';
 
 @Injectable({ providedIn: 'root' })
 export class TarefaService {
-  private apiUrl = 'http://localhost:3000/tarefas';
+  private apiUrl = '/api/tarefas';
 
   constructor(private http: HttpClient) {}
 

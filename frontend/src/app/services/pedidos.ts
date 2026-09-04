@@ -10,7 +10,7 @@ import { AtualizarPedido } from '../models/pedido/atualizar-pedido';
   providedIn: 'root',
 })
 export class PedidosService {
-  private apiUrl = 'http://localhost:3000/pedidos';
+  private apiUrl = '/api/pedidos';
 
   constructor(private http: HttpClient) {}
 

@@ -1,26 +1,15 @@
 services:
-  frontend:
+  frontend-build:
     build:
       context: .
 
-    container_name: angular-frontend
-
-    ports:
-      - '4200:4200'
+    container_name: frontend-build
 
     volumes:
       - .:/app
       - node_modules_frontend:/app/node_modules
 
-    command: npm run start -- --host 0.0.0.0
-
-    networks:
-      - frontend-network
+    command: npm run build
 
 volumes:
   node_modules_frontend:
-
-networks:
-  frontend-network:
-    external: true
-    name: projeto-aprendizado-network

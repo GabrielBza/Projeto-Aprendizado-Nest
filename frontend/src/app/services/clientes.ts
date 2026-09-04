@@ -9,7 +9,7 @@ import { AtualizarCliente } from '../models/cliente/AtualizarCliente';
   providedIn: 'root',
 })
 export class ClienteService {
-  private apiUrl = 'http://localhost:3000/clientes';
+  private apiUrl = '/api/clientes';
 
   constructor(private http: HttpClient) {}
 

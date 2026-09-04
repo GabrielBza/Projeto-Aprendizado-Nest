@@ -12,7 +12,7 @@ import { JwtPayload } from '../models/auth/jwt-payload.model';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:3000';
+  private readonly apiUrl = '/api';
 
   constructor(private http: HttpClient) {}
 

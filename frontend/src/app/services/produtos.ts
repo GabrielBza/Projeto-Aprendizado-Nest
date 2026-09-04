@@ -9,7 +9,7 @@ import { AtualizarProduto } from '../models/produto/atualizar-produto';
   providedIn: 'root',
 })
 export class ProdutoService {
-  private apiUrl = 'http://localhost:3000/produtos';
+  private apiUrl = '/api/produtos';
 
   constructor(private http: HttpClient) {}
 
