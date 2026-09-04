@@ -15,7 +15,7 @@ Browser
    ↓
 Nginx :8080
    ├── /      → arquivos estáticos do Angular
-   └── /api   → API NestJS
+   └── /api   → API NestJS compilada
                     ↓
                   TypeORM
                     ↓
@@ -26,6 +26,10 @@ Nginx :8080
 - **Nginx:** ponto único de entrada da aplicação. Serve os arquivos estáticos do Angular e encaminha as requisições `/api` para o backend.
 - **Backend:** API NestJS responsável pelas regras de negócio, autenticação, autorização e acesso aos dados.
 - **Banco de dados:** MySQL responsável pela persistência das informações.
+
+O Angular não é mantido em execução com `ng serve`. Durante a inicialização, um job Docker executa o build do frontend e gera os arquivos estáticos em `dist/`. Depois que o build termina com sucesso, o Nginx utiliza esses arquivos para servir a aplicação.
+
+O backend também não é executado com `npm run start:dev`. Sua imagem é construída em múltiplos estágios: primeiro o NestJS é compilado com `npm run build`; depois, a imagem final recebe apenas o código compilado e as dependências necessárias para produção, iniciando a API com `npm run start:prod`.
 
 ---
 
@@ -43,8 +47,9 @@ Projeto
 │
 ├── backend/
 │   ├── Dockerfile
-│   └── docker-compose.yml
-│       └── nest-backend
+│   ├── docker-compose.yml
+│   ├── .env
+│   └── .env.example
 │
 ├── database/
 │   └── docker-compose.yml
@@ -89,6 +94,42 @@ frontend-build
     Nginx
 ```
 
+O backend, por outro lado, permanece em execução. A diferença é que o container executa o JavaScript já compilado em `dist/`, em vez de utilizar o modo de desenvolvimento com watch.
+
+---
+
+# Build do backend
+
+O Dockerfile do backend utiliza **multi-stage build**.
+
+O primeiro estágio é responsável pela compilação:
+
+```text
+Código TypeScript
+      ↓
+npm ci
+      ↓
+npm run build
+      ↓
+    dist/
+```
+
+O segundo estágio cria a imagem que realmente será executada:
+
+```text
+node:24
+   ↓
+npm ci --omit=dev
+   ↓
+copia dist/ do estágio de build
+   ↓
+npm run start:prod
+   ↓
+node dist/main
+```
+
+Dessa forma, a imagem final não precisa carregar ferramentas utilizadas apenas durante o desenvolvimento, como TypeScript, Nest CLI, Jest e ESLint.
+
 ---
 
 # Como executar o projeto
@@ -110,17 +151,17 @@ git clone https://github.com/GabrielBza/Projeto-Aprendizado-Nest.git
 cd Projeto-Aprendizado-Nest
 ```
 
-## 2. Configurar as variáveis de ambiente
+## 2. Configurar as variáveis de ambiente do backend
 
-Antes de iniciar os containers, crie os arquivos `.env` a partir dos arquivos `.env.example` disponíveis no projeto.
+O projeto utiliza um arquivo `.env` no diretório `backend/`.
 
-### Backend
-
-No diretório `backend/`, crie:
+Crie:
 
 ```text
 backend/.env
 ```
+
+utilizando `backend/.env.example` como referência.
 
 Exemplo:
 
@@ -148,9 +189,15 @@ Descrição:
 
 > Dentro da rede Docker, o backend acessa o MySQL pelo nome do serviço, e não por `localhost`.
 
+> Neste projeto, **não existe um arquivo `database/.env`**. A configuração do serviço MySQL fica no Docker Compose da pasta `database/`. Os dados de conexão utilizados pelo backend devem corresponder à configuração do banco.
+
 ## 3. Criar a Docker Network compartilhada
 
-Os serviços utilizam uma Docker Network externa compartilhada.
+Os serviços utilizam uma Docker Network externa compartilhada chamada:
+
+```text
+projeto-aprendizado-network
+```
 
 Crie a network uma única vez:
 
@@ -158,7 +205,7 @@ Crie a network uma única vez:
 docker network create projeto-aprendizado-network
 ```
 
-Caso ela já exista, não é necessário executar o comando novamente.
+Caso ela já exista, não é necessário executar esse comando novamente.
 
 ## 4. Subir a aplicação
 
@@ -168,14 +215,30 @@ Na raiz do projeto:
 docker compose up -d --build
 ```
 
-Durante a inicialização:
+Durante o processo:
 
 ```text
-1. MySQL é iniciado
-2. Backend NestJS é iniciado
-3. frontend-build executa npm run build
-4. frontend-build termina com sucesso
-5. Nginx inicia e passa a servir a aplicação
+Docker constrói a imagem do backend
+   ↓
+NestJS é compilado
+   ↓
+imagem final do backend é criada
+
+frontend-build executa npm run build
+   ↓
+gerado dist/ do Angular
+   ↓
+frontend-build termina com sucesso
+   ↓
+Nginx inicia
+```
+
+Ao final, permanecem em execução:
+
+```text
+nginx
+nest-backend
+mysql-db
 ```
 
 ## 5. Acessar a aplicação
@@ -202,7 +265,9 @@ O Nginx recebe a requisição e a encaminha internamente para o NestJS.
 
 ---
 
-# Build do frontend durante o desenvolvimento
+# Alterações durante o desenvolvimento
+
+## Frontend
 
 Como o Angular é servido pelo Nginx como arquivos estáticos, alterações feitas no frontend precisam gerar um novo build.
 
@@ -212,7 +277,7 @@ Na raiz do projeto:
 docker compose run --rm frontend-build
 ```
 
-Esse comando:
+O fluxo é:
 
 ```text
 código Angular alterado
@@ -227,6 +292,20 @@ Nginx passa a servir os novos arquivos
 ```
 
 Depois do build, atualize o navegador. Em caso de cache, utilize um hard refresh.
+
+## Backend
+
+O backend agora executa o código compilado e não utiliza `start:dev` ou watch.
+
+Por isso, após alterar arquivos do backend, é necessário reconstruir sua imagem.
+
+Na raiz do projeto:
+
+```bash
+docker compose up -d --build backend
+```
+
+O Docker recompila o NestJS durante o build e recria o serviço usando a nova imagem.
 
 ---
 
@@ -322,6 +401,8 @@ Possui acesso de leitura às informações permitidas pelo sistema.
 Possui acesso às operações de criação, edição e exclusão.
 
 O frontend utiliza a role do JWT apenas para controlar a exibição de elementos da interface. A validação real de autorização é realizada pelo backend através de Guards.
+
+O frontend também verifica a expiração do token ao acessar rotas protegidas. A validação criptográfica e de segurança do JWT continua sendo responsabilidade do backend.
 
 ---
 
@@ -429,7 +510,7 @@ Pelo Swagger é possível visualizar e testar os endpoints disponíveis.
 
 # Nginx
 
-O Nginx funciona como o único ponto de entrada da aplicação.
+O Nginx funciona como o único ponto de entrada HTTP da aplicação.
 
 Sua responsabilidade é separar as requisições pelo caminho recebido:
 
@@ -466,7 +547,7 @@ Os serviços se comunicam através da Docker Network compartilhada:
 Nginx ────────────────────── NestJS ────────────────────── MySQL
 ```
 
-O backend e o banco não precisam ser acessados diretamente pelo navegador. O Nginx centraliza a entrada HTTP da aplicação.
+O backend e o banco não são publicados diretamente para o navegador. O Nginx centraliza a entrada HTTP da aplicação.
 
 O MySQL utiliza um Docker Volume para persistir os dados:
 
@@ -484,16 +565,21 @@ Dessa forma, reiniciar ou recriar o container do banco não remove automaticamen
 
 # Variáveis de ambiente
 
-Os arquivos `.env` contêm configurações específicas do ambiente e não devem ter seus valores reais versionados no repositório.
+Neste projeto, o arquivo de variáveis de ambiente utilizado pela aplicação está no backend:
 
-O projeto deve manter arquivos `.env.example` contendo apenas os nomes das variáveis e valores de exemplo:
+```text
+backend/.env
+```
+
+O arquivo real `.env` não deve ter seus valores versionados no repositório.
+
+O repositório pode manter:
 
 ```text
 backend/.env.example
-database/.env.example
 ```
 
-Exemplo de `backend/.env.example`:
+com valores de exemplo, por exemplo:
 
 ```env
 PORT=3000
@@ -505,14 +591,7 @@ DB_NAME=nome_do_banco
 JWT_SECRET=chave_secreta_de_exemplo
 ```
 
-Exemplo de `database/.env.example`:
-
-```env
-MYSQL_ROOT_PASSWORD=senha_root
-MYSQL_DATABASE=nome_do_banco
-MYSQL_USER=usuario
-MYSQL_PASSWORD=senha
-```
+Não existe `database/.env` neste projeto.
 
 ---
 
@@ -556,10 +635,21 @@ Browser
 localhost:8080
    ↓
 Nginx
-   ├── / → Angular estático
-   └── /api → NestJS
+   ├── / → Angular compilado e servido como arquivos estáticos
+   │
+   └── /api → NestJS compilado
                   ↓
                 MySQL
 ```
 
-O projeto foi estruturado para separar claramente as responsabilidades entre interface, API, persistência e infraestrutura, mantendo cada parte isolada e comunicando-se através da rede Docker.
+Em tempo de execução:
+
+```text
+nginx         → serviço permanente
+nest-backend  → serviço permanente, executando npm run start:prod
+mysql-db      → serviço permanente
+
+frontend-build → job temporário, executa npm run build e termina
+```
+
+O projeto separa as responsabilidades entre interface, API, persistência e infraestrutura, utilizando o Docker para construir e executar cada parte no formato adequado ao seu papel.
