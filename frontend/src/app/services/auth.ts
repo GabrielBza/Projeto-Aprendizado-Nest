@@ -48,4 +48,26 @@ export class AuthService {
   eAdmin(): boolean {
     return this.obterRole() === 'ADMIN';
   }
+
+  tokenValido(): boolean {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const payload = jwtDecode<JwtPayload>(token);
+
+      if (!payload.exp) {
+        return false;
+      }
+
+      const agora = Math.floor(Date.now() / 1000);
+
+      return payload.exp > agora;
+    } catch {
+      return false;
+    }
+  }
 }

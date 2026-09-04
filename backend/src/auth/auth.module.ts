@@ -17,7 +17,7 @@ import { RolesGuard } from './roles.guard';
         secret: configService.get<string>('JWT_SECRET'),
 
         signOptions: {
-          expiresIn: '15min',
+          expiresIn: '30s',
         },
       }),
     }),
